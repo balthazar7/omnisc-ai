@@ -1,0 +1,216 @@
+{
+  "FromName": "Elie POTHIER",
+  "MessageStream": "inbound",
+  "From": "elie.pothier@courslacordee.fr",
+  "FromFull": {
+    "Email": "elie.pothier@courslacordee.fr",
+    "Name": "Elie POTHIER",
+    "MailboxHash": ""
+  },
+  "To": "\"3008a0854b4d10a45c36121168c7a665@inbound.postmarkapp.com\" <3008a0854b4d10a45c36121168c7a665@inbound.postmarkapp.com>",
+  "ToFull": [
+    {
+      "Email": "3008a0854b4d10a45c36121168c7a665@inbound.postmarkapp.com",
+      "Name": "3008a0854b4d10a45c36121168c7a665@inbound.postmarkapp.com",
+      "MailboxHash": ""
+    }
+  ],
+  "Cc": "",
+  "CcFull": [],
+  "Bcc": "",
+  "BccFull": [],
+  "OriginalRecipient": "3008a0854b4d10a45c36121168c7a665@inbound.postmarkapp.com",
+  "Subject": "Test",
+  "MessageID": "3f72be7d-cfb7-4c85-be17-3f62df433c87",
+  "ReplyTo": "",
+  "MailboxHash": "",
+  "Date": "Mon, 31 Aug 2026 18:17:41 +0000",
+  "TextBody": "Test\n\nEnvoyé à partir de Outlook pour iOS<https://aka.ms/o0ukef>\n",
+  "HtmlBody": "<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">\n</head>\n<body>\n<div dir=\"ltr\" style=\"font-family: Aptos, Aptos_MSFontService, -apple-system, Roboto, Arial, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);\">\nTest</div>\n<div id=\"ms-outlook-mobile-body-separator-line\" data-applydefaultfontstyles=\"true\" style=\"font-family: Aptos, Aptos_MSFontService, -apple-system, Roboto, Arial, Helvetica, sans-serif; font-size: 12pt;\" dir=\"ltr\">\n<div style=\"font-family: Aptos, Aptos_MSFontService, -apple-system, Roboto, Arial, Helvetica, sans-serif; font-size: 12pt;\" dir=\"ltr\">\n<br>\n</div>\n</div>\n<div style=\"font-family: Aptos, Aptos_MSFontService, -apple-system, Roboto, Arial, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);\" id=\"ms-outlook-mobile-signature\">\n<span style=\"font-family: Aptos, Aptos_MSFontService, -apple-system, Roboto, Arial, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);\">Envoyé à partir de\n</span><span style=\"font-family: Aptos, Aptos_MSFontService, -apple-system, Roboto, Arial, Helvetica, sans-serif; font-size: 12pt;\"><a href=\"https://aka.ms/o0ukef\">Outlook pour iOS</a></span></div>\n</body>\n</html>\n",
+  "StrippedTextReply": "",
+  "RawEmail": "Received: by p-pm-inboundg03c-aws-euwest1c.inbound.postmarkapp.com (Postfix, from userid 996)\n\tid B7D07405674; Mon, 31 Aug 2026 18:17:42 +0000 (UTC)\nX-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on\n\tp-pm-inboundg03c-aws-euwest1c\nX-Spam-Status: No\nX-Spam-Score: -0.1\nX-Spam-Tests: DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HTML_MESSAGE,\n\tRCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,RCVD_IN_ZEN_BLOCKED_OPENDNS,\n\tSPF_HELO_PASS,SPF_PASS\nReceived-SPF: pass (courslacordee.fr: Sender is authorized to use 'elie.pothier@courslacordee.fr' in 'mfrom' identity (mechanism 'include:spf.protection.outlook.com' matched)) receiver=p-pm-inboundg03c-aws-euwest1c; identity=mailfrom; envelope-from=\"elie.pothier@courslacordee.fr\"; helo=PAUP264CU001.outbound.protection.outlook.com; client-ip=40.107.160.103\nReceived: from PAUP264CU001.outbound.protection.outlook.com (mail-francecentralazon11021103.outbound.protection.outlook.com [40.107.160.103])\n\t(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))\n\t(No client certificate requested)\n\tby p-pm-inboundg03c-aws-euwest1c.inbound.postmarkapp.com (Postfix) with ESMTPS id 78391405126\n\tfor <3008a0854b4d10a45c36121168c7a665@inbound.postmarkapp.com>; Mon, 31 Aug 2026 18:17:42 +0000 (UTC)\nARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;\n b=VTZ79QioG9LPJSwWpsyPJnhs1YlnFjD0ZbD0uLGXEkGk64AM8Vve49I2oCJkSkcDaaCtfzFDf2cRmn9WmIOelgSpa7Icd/Q9m1Kz/sb3g+qVgf8CRXtjaK9md7My1XHrNSV7air7uC27HVWwYF9xagnKFOX9Fnzie2MyzzS77bGFPdWbEyKx0wZ8+povlwrr282Jgll6nF2Ibg8PN5rIRaPnfous9e6wTCkXCYREJcFLD+xkYryRpIfZEFT1ojF3cKg2IaZAUM8VYD7gEvF2bgURUnaPTGwz4gG9xz1ISBZYXi5GhRw04esYlHwE2MASSjRbP2EeEpeBzh18Kk0lUg==\nARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;\n s=arcselector10001;\n h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;\n bh=Hg1PL/S4j96yAxHCaJ/D0h0hLzhWyp2EUxkH6RcyX4g=;\n b=NV6bRMMxpa+JFmn4o/btWPWIAQs+MjL4clXKi3Rxsa4qovlCFE7/Noge6h0RCdNw8DFqp1AIa8tTITzTM6TmoAD3llaN/tW8MqG0uYTUs6coPNBKoRV6IZkwufzZj2n5KJtZwMWl96GbjEzgFhYTwhU64zlZvu579zRrt7PmN4UZIsaCdD1RZizEPKp5Ttm4U/9lY+D9WtNIblbWNkRxqo8ZloWh/US5P4zzvuwzOJVG89ovw4yCY+IkXGg4Em2Zy7Iofet0Q78LCHaT4/7CcEkWkYutxSuRs7ntf7ZxMtatNOF7mYa9XDtrr9txLezRiGJBrafCUqeWUzJgQMeqnQ==\nARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass\n smtp.mailfrom=courslacordee.fr; dmarc=pass action=none\n header.from=courslacordee.fr; dkim=pass header.d=courslacordee.fr; arc=none\nDKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=courslacordee.fr;\n s=selector1;\n h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;\n bh=Hg1PL/S4j96yAxHCaJ/D0h0hLzhWyp2EUxkH6RcyX4g=;\n b=RaXwbNykRRfIarfW4O8DkoZhzdtqOQqSSGcRCfe4yKcLSmuITBUI2QpV/Rvu03rEOt9a3gMOC+M0ui23sF4xbgCyG7Ts+SGdIR5557D3Z1NrAhDw9KHbXPNb28GKB5srqpxK11uoFqOvzLdkmQcpifLHvv1nOREAKpHRBrWrP2oLj3w5y4ojwc9TVg2O7VL/JT9nDKeDsraVqoM1YkfqwmdblwKWqGb+EXuwvw+lqPSaNuN6PlYqfR5XmSlMDKuKAYC+lWBCHdhZUePYn6K/CtECpCS8wPoccud9Eyugv44VYDepyZl49ovtHLYaomcW5dZDG75ATu+kb6eUmxaM3g==\nReceived: from MR1P264MB3825.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:2d::6) by\n PR1P264MB3600.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:143::13) with Microsoft\n SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id\n 15.21.360.13; Mon, 31 Aug 2026 18:17:41 +0000\nReceived: from MR1P264MB3825.FRAP264.PROD.OUTLOOK.COM\n ([fe80::b611:3127:7af9:8976]) by MR1P264MB3825.FRAP264.PROD.OUTLOOK.COM\n ([fe80::b611:3127:7af9:8976%6]) with mapi id 15.21.0360.008; Mon, 31 Aug 2026\n 18:17:41 +0000\nFrom: Elie POTHIER <elie.pothier@courslacordee.fr>\nTo: \"3008a0854b4d10a45c36121168c7a665@inbound.postmarkapp.com\"\n\t<3008a0854b4d10a45c36121168c7a665@inbound.postmarkapp.com>\nSubject: Test\nThread-Topic: Test\nThread-Index: AQHdOXT5XcHdeCH4yU2nV+wMbJpJvw==\nDate: Mon, 31 Aug 2026 18:17:41 +0000\nMessage-ID:\n <MR1P264MB38259FE8AC25923B3C7C40B1F9A92@MR1P264MB3825.FRAP264.PROD.OUTLOOK.COM>\nAccept-Language: fr-FR, en-US\nContent-Language: fr-FR\nX-MS-Has-Attach:\nX-MS-TNEF-Correlator:\nx-ms-reactions: allow\nauthentication-results: dkim=none (message not signed)\n header.d=none;dmarc=none action=none header.from=courslacordee.fr;\nx-ms-publictraffictype: Email\nx-ms-traffictypediagnostic: MR1P264MB3825:EE_|PR1P264MB3600:EE_\nx-ms-office365-filtering-correlation-id: aa7d44ea-90dd-4b1f-f25b-08df078c2563\nx-ms-exchange-atpmessageproperties: SA\nx-ms-exchange-senderadcheck: 1\nx-ms-exchange-antispam-relay: 0\nx-microsoft-antispam:\n BCL:0;ARA:13230040|376014|1800799024|23010399003|10070799003|366016|38070700021|10067099003|18002099003|55112099003|56012099006|8096899003;\nx-microsoft-antispam-message-info:\n tcWoUVZKEg5Mr1L/27GmswDXjV5+KR9ZpkK9W9eExs4XanhC9yuwfRHSopAI+J7ubas8xXHJBVsMqAgoEvEOwhX6Q7oM5FEdkXjfUcpF3Q2nFt/XsbQoc/p1jUwjbfEXbVOJDngRS7a0OD5e8vGRY9tmU9uRhbEzREyjxoWCJlUfZ7vX6iOim1kvyXEJ9PfOVoZExsVN3gZVRYdzWdsosLIh2B0fkONIqYOMJ1L69VWIo+ujxHtRHUp0ccWw9RHsAY6jzsrUOmSSYXduvqXQBesvdBXMVDM8M7s5qE4XK4EYdgu5fCmTfKDP5P17SBKrB7ton3njnN+36cbyymnUeB7lRg8C2KfGyZB57wENGhP0VGcfR8r3bcj6aHzvJtvKewM6uTTZbz6iIvS90sPYrHoFOv/J95S7ilOh8edn+EI9pKiMqe3h+AhccDDmHeZDden3tbl+U6QAcC3slN2NcFgD+UXt804XPnWdZI2XUPe2UzAsuzC8VfUmm8z+CEYWHO/5iAUumn8YniPLWpRzeXxTHDm/2gGIJGBIOtIXcE/u9IVc8uoYf9LmQWgmmzaxuKIXhCFLVl3pPoljMPTNQD9iPSjauKclkavaV3AvFLsmrJZZX3y2eqBHmm1lxiBAbR56/4JMbNI83t74vrqKZ/XboKhqRVQuNJLh86fP1bykh5BGRtyFK13OZbXmTLL27v3TM7ZbcicG7t0TjP5A/zcXJHSDqCyngOP5LkSljrQ=\nx-forefront-antispam-report:\n CIP:255.255.255.255;CTRY:;LANG:fr;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MR1P264MB3825.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(23010399003)(10070799003)(366016)(38070700021)(10067099003)(18002099003)(55112099003)(56012099006)(8096899003);DIR:OUT;SFP:1102;\nx-ms-exchange-antispam-messagedata-chunkcount: 2\nx-ms-exchange-antispam-messagedata-0:\n =?iso-8859-1?Q?hW0KzjBY5ICJ0CS7gfB5ldazCUFdmPI/F37zYhbh+OajH4VV9bTeHW+L6Y?=\n =?iso-8859-1?Q?43JOu3Ikk+ZI/w2bgLQpOheZRsJySSxFMl8pTS+/lJbf2PNCJ+gJ39tiPm?=\n =?iso-8859-1?Q?Z2cfzDPZvyDir6GNAOMtOepHWtor210Vn3IWRrkv3CU8M/EyGrTXsySioX?=\n =?iso-8859-1?Q?x2gHzrLIFZhXw1FBG7dUbv18dVP7Tz2+JqktSvPsSwk8zLMafSoIGGPSpq?=\n =?iso-8859-1?Q?5hoRw0m+wMN+dstWkyf/8BiAD4nK7PLUj8HqV3fLC9pu9N79KndqD3erI9?=\n =?iso-8859-1?Q?6zXNI1Ns1XrxhO+rj2ULCKZh7ydlALLXmmrY9oAIP0+TtrdeL52v6CNwix?=\n =?iso-8859-1?Q?JXKg+BeaYxBty2bY9/CLyY7mXSbDB+i53v1K3zR8aNhqw5JDi3mo7/zPnx?=\n =?iso-8859-1?Q?AKrDUOHZbVdOBmRZBL67gYT5OAx2/HX5DJSdd2tJ5yciPWkSwrQdvcYIue?=\n =?iso-8859-1?Q?BezykFptkGXiW33Ax39RNxYdwLPficUBrLTB3lt1J/gxV1JeiIKQZR1OY6?=\n =?iso-8859-1?Q?fcyNdqP+OosReVmqAVxZ1uLmS9b26VEKBYzE/78fp5D42ABtybsFQfrIWU?=\n =?iso-8859-1?Q?mq0PKCOdq1Ag700CgGdLHnxriinl1zVjcs3TomrZQvT8EQS2Za2oa/FVgh?=\n =?iso-8859-1?Q?HjxllN8uLH9DdREG6UbwvjGd/RA3gGaY15UWLs+dQTPcFgaiiN7uSKrYHh?=\n =?iso-8859-1?Q?Mqzn/m/GG7NzUF/95MgClujLDI1tVOsvi9ariMZowpLd551KHBOn+7CU3M?=\n =?iso-8859-1?Q?PSJZV/hxumJCbwYVnmLtsnIgtqRZCgc8PQ20ygD4dOE4+jWogEaMIF6fPX?=\n =?iso-8859-1?Q?tu/OCzgNOew2fLW4ViY5S3ejsKxl7VhYQJIVRIm00UPjxbu6cS2wGGH8HN?=\n =?iso-8859-1?Q?RAibXaLv6J8txy7yrRgfh1Dgq6ZfXG4KMBhDazzLrHLBYlRSBLbh2TutwJ?=\n =?iso-8859-1?Q?MKuEbNkM43MIJoePNZfQ1tPBJH/nzHbJf7g/0wy83uSqOXvsFh3ri7OOkv?=\n =?iso-8859-1?Q?Pts7fqNF37ClkyM1ttRKcqh/X47JGaRxTaVzHb8JfHCYyxxV6+pS5OboDj?=\n =?iso-8859-1?Q?zXUM9XU5+fyCQCVLL+DrLI3+jlIUHG/k3mMpMgU+I0unQmjFxkJ+jqVjIn?=\n =?iso-8859-1?Q?s+ZgfZYuUP5U67HExXmKyd3fIL5g/I7jR4S7jfLlCwtRo/TRWFlxft92sm?=\n =?iso-8859-1?Q?Af0aKGosJN1MIxvxG/nhr0+d5DokwgBntbzmO1GI6fW94Mki5VS8RTM6wK?=\n =?iso-8859-1?Q?6FMghN0Qp9zQ3IebNCBbQV89uiXe7WtDWmmqM9+Z45GyRs0A6LFB2hp8F6?=\n =?iso-8859-1?Q?SLdKxR5KMU9fBRksp0Eo4lKcDACcXMSGXuKFtYknsBLUdkrZnEz7wcxnEF?=\n =?iso-8859-1?Q?6M46ohMtI5VbN2jAZnXm+aZRbapbCzbuNrjfZqB8oon9a2Udi9URrnAnO9?=\n =?iso-8859-1?Q?YfjDN2b2UVpz7pSt54yku7F6DzjBRPGeAVcFxdj1jbJMUWvOMzptB9IN1n?=\n =?iso-8859-1?Q?HXvsGksHN/qmNRoABnFNk3ByWLpt435aCnqY3+PWxUUksGYW/2HBaxh9rG?=\n =?iso-8859-1?Q?PUxdqzAR5yhnFqlabFD8mjnziPnuGuwSVfxSUjuw5hy+Lqopo7LSEZD56K?=\n =?iso-8859-1?Q?Mhmmk3uAUU0vsebwgTyvNty+FFKZUd6BGD3jFDveFFc4YeqvIL1tOdnKEh?=\n =?iso-8859-1?Q?QVZtzTW30HL1mzvcCKpMxNB/VwLo7i3aXtsqGfxHj8B72T4CxpOR3TLM4U?=\n =?iso-8859-1?Q?vatYRJu9Aei/tbwzxcaKtC0ObaUNfWJl4qUYr2aJKpVDd6SIqMTsE1Dfg8?=\n =?iso-8859-1?Q?efzVK8dxdWqHGNEIK/6HO0CTtE9qqzWI2Qnn4C63yibVSr29WUFO7w5bYd?=\n =?iso-8859-1?Q?3c?=\nx-ms-exchange-antispam-messagedata-1:\n elE/Rocm31WUgv6sA8ouzczv5De6g5Aj2ugb3+eQnmYfEh8rQkjmuPps\nContent-Type: multipart/alternative;\n\tboundary=\"_000_MR1P264MB38259FE8AC25923B3C7C40B1F9A92MR1P264MB3825FRAP_\"\nMIME-Version: 1.0\nX-OriginatorOrg: courslacordee.fr\nX-MS-Exchange-CrossTenant-AuthAs: Internal\nX-MS-Exchange-CrossTenant-AuthSource: MR1P264MB3825.FRAP264.PROD.OUTLOOK.COM\nX-MS-Exchange-CrossTenant-Network-Message-Id: aa7d44ea-90dd-4b1f-f25b-08df078c2563\nX-MS-Exchange-CrossTenant-originalarrivaltime: 31 Aug 2026 18:17:41.3948\n (UTC)\nX-MS-Exchange-CrossTenant-fromentityheader: Hosted\nX-MS-Exchange-CrossTenant-id: 4e7b6e5c-c652-4ed4-afd6-9a62a8d60cf6\nX-MS-Exchange-CrossTenant-mailboxtype: HOSTED\nX-MS-Exchange-CrossTenant-userprincipalname: doS863QDhsSX4moShM3ogMRlD8UAjJWzowMEit4XvbDQZzr/LjvzoUA8hod8ozYHVpzuWB3e/1vUR40EYGpzJmlFmtRUoiL8NCxi594CKIM=\nX-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB3600\n\n--_000_MR1P264MB38259FE8AC25923B3C7C40B1F9A92MR1P264MB3825FRAP_\nContent-Type: text/plain; charset=\"iso-8859-1\"\nContent-Transfer-Encoding: quoted-printable\n\nTest\n\nEnvoy=E9 =E0 partir de Outlook pour iOS<https://aka.ms/o0ukef>\n\n--_000_MR1P264MB38259FE8AC25923B3C7C40B1F9A92MR1P264MB3825FRAP_\nContent-Type: text/html; charset=\"iso-8859-1\"\nContent-Transfer-Encoding: quoted-printable\n\n<html>\n<head>\n<meta http-equiv=3D\"Content-Type\" content=3D\"text/html; charset=3Diso-8859-=\n1\">\n</head>\n<body>\n<div dir=3D\"ltr\" style=3D\"font-family: Aptos, Aptos_MSFontService, -apple-s=\nystem, Roboto, Arial, Helvetica, sans-serif; font-size: 12pt; color: rgb(0,=\n 0, 0);\">\nTest</div>\n<div id=3D\"ms-outlook-mobile-body-separator-line\" data-applydefaultfontstyl=\nes=3D\"true\" style=3D\"font-family: Aptos, Aptos_MSFontService, -apple-system=\n, Roboto, Arial, Helvetica, sans-serif; font-size: 12pt;\" dir=3D\"ltr\">\n<div style=3D\"font-family: Aptos, Aptos_MSFontService, -apple-system, Robot=\no, Arial, Helvetica, sans-serif; font-size: 12pt;\" dir=3D\"ltr\">\n<br>\n</div>\n</div>\n<div style=3D\"font-family: Aptos, Aptos_MSFontService, -apple-system, Robot=\no, Arial, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);\" id=\n=3D\"ms-outlook-mobile-signature\">\n<span style=3D\"font-family: Aptos, Aptos_MSFontService, -apple-system, Robo=\nto, Arial, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);\">En=\nvoy=E9 =E0 partir de\n</span><span style=3D\"font-family: Aptos, Aptos_MSFontService, -apple-syste=\nm, Roboto, Arial, Helvetica, sans-serif; font-size: 12pt;\"><a href=3D\"https=\n://aka.ms/o0ukef\">Outlook pour iOS</a></span></div>\n</body>\n</html>\n\n--_000_MR1P264MB38259FE8AC25923B3C7C40B1F9A92MR1P264MB3825FRAP_--\n",
+  "Tag": "",
+  "Headers": [
+    {
+      "Name": "Return-Path",
+      "Value": "<elie.pothier@courslacordee.fr>"
+    },
+    {
+      "Name": "Received",
+      "Value": "by p-pm-inboundg03c-aws-euwest1c.inbound.postmarkapp.com (Postfix, from userid 996)\tid B7D07405674; Mon, 31 Aug 2026 18:17:42 +0000 (UTC)"
+    },
+    {
+      "Name": "X-Spam-Checker-Version",
+      "Value": "SpamAssassin 3.4.0 (2014-02-07) on\tp-pm-inboundg03c-aws-euwest1c"
+    },
+    {
+      "Name": "X-Spam-Status",
+      "Value": "No"
+    },
+    {
+      "Name": "X-Spam-Score",
+      "Value": "-0.1"
+    },
+    {
+      "Name": "X-Spam-Tests",
+      "Value": "DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HTML_MESSAGE,\tRCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,RCVD_IN_ZEN_BLOCKED_OPENDNS,\tSPF_HELO_PASS,SPF_PASS"
+    },
+    {
+      "Name": "Received-SPF",
+      "Value": "pass (courslacordee.fr: Sender is authorized to use 'elie.pothier@courslacordee.fr' in 'mfrom' identity (mechanism 'include:spf.protection.outlook.com' matched)) receiver=p-pm-inboundg03c-aws-euwest1c; identity=mailfrom; envelope-from=\"elie.pothier@courslacordee.fr\"; helo=PAUP264CU001.outbound.protection.outlook.com; client-ip=40.107.160.103"
+    },
+    {
+      "Name": "Received",
+      "Value": "from PAUP264CU001.outbound.protection.outlook.com (mail-francecentralazon11021103.outbound.protection.outlook.com [40.107.160.103])\t(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))\t(No client certificate requested)\tby p-pm-inboundg03c-aws-euwest1c.inbound.postmarkapp.com (Postfix) with ESMTPS id 78391405126\tfor <3008a0854b4d10a45c36121168c7a665@inbound.postmarkapp.com>; Mon, 31 Aug 2026 18:17:42 +0000 (UTC)"
+    },
+    {
+      "Name": "ARC-Seal",
+      "Value": "i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none; b=VTZ79QioG9LPJSwWpsyPJnhs1YlnFjD0ZbD0uLGXEkGk64AM8Vve49I2oCJkSkcDaaCtfzFDf2cRmn9WmIOelgSpa7Icd/Q9m1Kz/sb3g+qVgf8CRXtjaK9md7My1XHrNSV7air7uC27HVWwYF9xagnKFOX9Fnzie2MyzzS77bGFPdWbEyKx0wZ8+povlwrr282Jgll6nF2Ibg8PN5rIRaPnfous9e6wTCkXCYREJcFLD+xkYryRpIfZEFT1ojF3cKg2IaZAUM8VYD7gEvF2bgURUnaPTGwz4gG9xz1ISBZYXi5GhRw04esYlHwE2MASSjRbP2EeEpeBzh18Kk0lUg=="
+    },
+    {
+      "Name": "ARC-Message-Signature",
+      "Value": "i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector10001; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1; bh=Hg1PL/S4j96yAxHCaJ/D0h0hLzhWyp2EUxkH6RcyX4g=; b=NV6bRMMxpa+JFmn4o/btWPWIAQs+MjL4clXKi3Rxsa4qovlCFE7/Noge6h0RCdNw8DFqp1AIa8tTITzTM6TmoAD3llaN/tW8MqG0uYTUs6coPNBKoRV6IZkwufzZj2n5KJtZwMWl96GbjEzgFhYTwhU64zlZvu579zRrt7PmN4UZIsaCdD1RZizEPKp5Ttm4U/9lY+D9WtNIblbWNkRxqo8ZloWh/US5P4zzvuwzOJVG89ovw4yCY+IkXGg4Em2Zy7Iofet0Q78LCHaT4/7CcEkWkYutxSuRs7ntf7ZxMtatNOF7mYa9XDtrr9txLezRiGJBrafCUqeWUzJgQMeqnQ=="
+    },
+    {
+      "Name": "ARC-Authentication-Results",
+      "Value": "i=1; mx.microsoft.com 1; spf=pass smtp.mailfrom=courslacordee.fr; dmarc=pass action=none header.from=courslacordee.fr; dkim=pass header.d=courslacordee.fr; arc=none"
+    },
+    {
+      "Name": "DKIM-Signature",
+      "Value": "v=1; a=rsa-sha256; c=relaxed/relaxed; d=courslacordee.fr; s=selector1; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=Hg1PL/S4j96yAxHCaJ/D0h0hLzhWyp2EUxkH6RcyX4g=; b=RaXwbNykRRfIarfW4O8DkoZhzdtqOQqSSGcRCfe4yKcLSmuITBUI2QpV/Rvu03rEOt9a3gMOC+M0ui23sF4xbgCyG7Ts+SGdIR5557D3Z1NrAhDw9KHbXPNb28GKB5srqpxK11uoFqOvzLdkmQcpifLHvv1nOREAKpHRBrWrP2oLj3w5y4ojwc9TVg2O7VL/JT9nDKeDsraVqoM1YkfqwmdblwKWqGb+EXuwvw+lqPSaNuN6PlYqfR5XmSlMDKuKAYC+lWBCHdhZUePYn6K/CtECpCS8wPoccud9Eyugv44VYDepyZl49ovtHLYaomcW5dZDG75ATu+kb6eUmxaM3g=="
+    },
+    {
+      "Name": "Received",
+      "Value": "from MR1P264MB3825.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:2d::6) by PR1P264MB3600.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:143::13) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.13; Mon, 31 Aug 2026 18:17:41 +0000"
+    },
+    {
+      "Name": "Received",
+      "Value": "from MR1P264MB3825.FRAP264.PROD.OUTLOOK.COM ([fe80::b611:3127:7af9:8976]) by MR1P264MB3825.FRAP264.PROD.OUTLOOK.COM ([fe80::b611:3127:7af9:8976%6]) with mapi id 15.21.0360.008; Mon, 31 Aug 2026 18:17:41 +0000"
+    },
+    {
+      "Name": "Thread-Topic",
+      "Value": "Test"
+    },
+    {
+      "Name": "Thread-Index",
+      "Value": "AQHdOXT5XcHdeCH4yU2nV+wMbJpJvw=="
+    },
+    {
+      "Name": "Message-ID",
+      "Value": "<MR1P264MB38259FE8AC25923B3C7C40B1F9A92@MR1P264MB3825.FRAP264.PROD.OUTLOOK.COM>"
+    },
+    {
+      "Name": "Accept-Language",
+      "Value": "fr-FR, en-US"
+    },
+    {
+      "Name": "X-MS-Has-Attach",
+      "Value": ""
+    },
+    {
+      "Name": "X-MS-TNEF-Correlator",
+      "Value": ""
+    },
+    {
+      "Name": "x-ms-reactions",
+      "Value": "allow"
+    },
+    {
+      "Name": "authentication-results",
+      "Value": "dkim=none (message not signed) header.d=none;dmarc=none action=none header.from=courslacordee.fr;"
+    },
+    {
+      "Name": "x-ms-publictraffictype",
+      "Value": "Email"
+    },
+    {
+      "Name": "x-ms-traffictypediagnostic",
+      "Value": "MR1P264MB3825:EE_|PR1P264MB3600:EE_"
+    },
+    {
+      "Name": "x-ms-office365-filtering-correlation-id",
+      "Value": "aa7d44ea-90dd-4b1f-f25b-08df078c2563"
+    },
+    {
+      "Name": "x-ms-exchange-atpmessageproperties",
+      "Value": "SA"
+    },
+    {
+      "Name": "x-ms-exchange-senderadcheck",
+      "Value": "1"
+    },
+    {
+      "Name": "x-ms-exchange-antispam-relay",
+      "Value": "0"
+    },
+    {
+      "Name": "x-microsoft-antispam",
+      "Value": "BCL:0;ARA:13230040|376014|1800799024|23010399003|10070799003|366016|38070700021|10067099003|18002099003|55112099003|56012099006|8096899003;"
+    },
+    {
+      "Name": "x-microsoft-antispam-message-info",
+      "Value": "tcWoUVZKEg5Mr1L/27GmswDXjV5+KR9ZpkK9W9eExs4XanhC9yuwfRHSopAI+J7ubas8xXHJBVsMqAgoEvEOwhX6Q7oM5FEdkXjfUcpF3Q2nFt/XsbQoc/p1jUwjbfEXbVOJDngRS7a0OD5e8vGRY9tmU9uRhbEzREyjxoWCJlUfZ7vX6iOim1kvyXEJ9PfOVoZExsVN3gZVRYdzWdsosLIh2B0fkONIqYOMJ1L69VWIo+ujxHtRHUp0ccWw9RHsAY6jzsrUOmSSYXduvqXQBesvdBXMVDM8M7s5qE4XK4EYdgu5fCmTfKDP5P17SBKrB7ton3njnN+36cbyymnUeB7lRg8C2KfGyZB57wENGhP0VGcfR8r3bcj6aHzvJtvKewM6uTTZbz6iIvS90sPYrHoFOv/J95S7ilOh8edn+EI9pKiMqe3h+AhccDDmHeZDden3tbl+U6QAcC3slN2NcFgD+UXt804XPnWdZI2XUPe2UzAsuzC8VfUmm8z+CEYWHO/5iAUumn8YniPLWpRzeXxTHDm/2gGIJGBIOtIXcE/u9IVc8uoYf9LmQWgmmzaxuKIXhCFLVl3pPoljMPTNQD9iPSjauKclkavaV3AvFLsmrJZZX3y2eqBHmm1lxiBAbR56/4JMbNI83t74vrqKZ/XboKhqRVQuNJLh86fP1bykh5BGRtyFK13OZbXmTLL27v3TM7ZbcicG7t0TjP5A/zcXJHSDqCyngOP5LkSljrQ="
+    },
+    {
+      "Name": "x-forefront-antispam-report",
+      "Value": "CIP:255.255.255.255;CTRY:;LANG:fr;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MR1P264MB3825.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(23010399003)(10070799003)(366016)(38070700021)(10067099003)(18002099003)(55112099003)(56012099006)(8096899003);DIR:OUT;SFP:1102;"
+    },
+    {
+      "Name": "x-ms-exchange-antispam-messagedata-chunkcount",
+      "Value": "2"
+    },
+    {
+      "Name": "x-ms-exchange-antispam-messagedata-0",
+      "Value": "hW0KzjBY5ICJ0CS7gfB5ldazCUFdmPI/F37zYhbh+OajH4VV9bTeHW+L6Y43JOu3Ikk+ZI/w2bgLQpOheZRsJySSxFMl8pTS+/lJbf2PNCJ+gJ39tiPmZ2cfzDPZvyDir6GNAOMtOepHWtor210Vn3IWRrkv3CU8M/EyGrTXsySioXx2gHzrLIFZhXw1FBG7dUbv18dVP7Tz2+JqktSvPsSwk8zLMafSoIGGPSpq5hoRw0m+wMN+dstWkyf/8BiAD4nK7PLUj8HqV3fLC9pu9N79KndqD3erI96zXNI1Ns1XrxhO+rj2ULCKZh7ydlALLXmmrY9oAIP0+TtrdeL52v6CNwixJXKg+BeaYxBty2bY9/CLyY7mXSbDB+i53v1K3zR8aNhqw5JDi3mo7/zPnxAKrDUOHZbVdOBmRZBL67gYT5OAx2/HX5DJSdd2tJ5yciPWkSwrQdvcYIueBezykFptkGXiW33Ax39RNxYdwLPficUBrLTB3lt1J/gxV1JeiIKQZR1OY6fcyNdqP+OosReVmqAVxZ1uLmS9b26VEKBYzE/78fp5D42ABtybsFQfrIWUmq0PKCOdq1Ag700CgGdLHnxriinl1zVjcs3TomrZQvT8EQS2Za2oa/FVghHjxllN8uLH9DdREG6UbwvjGd/RA3gGaY15UWLs+dQTPcFgaiiN7uSKrYHhMqzn/m/GG7NzUF/95MgClujLDI1tVOsvi9ariMZowpLd551KHBOn+7CU3MPSJZV/hxumJCbwYVnmLtsnIgtqRZCgc8PQ20ygD4dOE4+jWogEaMIF6fPXtu/OCzgNOew2fLW4ViY5S3ejsKxl7VhYQJIVRIm00UPjxbu6cS2wGGH8HNRAibXaLv6J8txy7yrRgfh1Dgq6ZfXG4KMBhDazzLrHLBYlRSBLbh2TutwJMKuEbNkM43MIJoePNZfQ1tPBJH/nzHbJf7g/0wy83uSqOXvsFh3ri7OOkvPts7fqNF37ClkyM1ttRKcqh/X47JGaRxTaVzHb8JfHCYyxxV6+pS5OboDjzXUM9XU5+fyCQCVLL+DrLI3+jlIUHG/k3mMpMgU+I0unQmjFxkJ+jqVjIns+ZgfZYuUP5U67HExXmKyd3fIL5g/I7jR4S7jfLlCwtRo/TRWFlxft92smAf0aKGosJN1MIxvxG/nhr0+d5DokwgBntbzmO1GI6fW94Mki5VS8RTM6wK6FMghN0Qp9zQ3IebNCBbQV89uiXe7WtDWmmqM9+Z45GyRs0A6LFB2hp8F6SLdKxR5KMU9fBRksp0Eo4lKcDACcXMSGXuKFtYknsBLUdkrZnEz7wcxnEF6M46ohMtI5VbN2jAZnXm+aZRbapbCzbuNrjfZqB8oon9a2Udi9URrnAnO9YfjDN2b2UVpz7pSt54yku7F6DzjBRPGeAVcFxdj1jbJMUWvOMzptB9IN1nHXvsGksHN/qmNRoABnFNk3ByWLpt435aCnqY3+PWxUUksGYW/2HBaxh9rGPUxdqzAR5yhnFqlabFD8mjnziPnuGuwSVfxSUjuw5hy+Lqopo7LSEZD56KMhmmk3uAUU0vsebwgTyvNty+FFKZUd6BGD3jFDveFFc4YeqvIL1tOdnKEhQVZtzTW30HL1mzvcCKpMxNB/VwLo7i3aXtsqGfxHj8B72T4CxpOR3TLM4UvatYRJu9Aei/tbwzxcaKtC0ObaUNfWJl4qUYr2aJKpVDd6SIqMTsE1Dfg8efzVK8dxdWqHGNEIK/6HO0CTtE9qqzWI2Qnn4C63yibVSr29WUFO7w5bYd3c"
+    },
+    {
+      "Name": "x-ms-exchange-antispam-messagedata-1",
+      "Value": "elE/Rocm31WUgv6sA8ouzczv5De6g5Aj2ugb3+eQnmYfEh8rQkjmuPps"
+    },
+    {
+      "Name": "MIME-Version",
+      "Value": "1.0"
+    },
+    {
+      "Name": "X-OriginatorOrg",
+      "Value": "courslacordee.fr"
+    },
+    {
+      "Name": "X-MS-Exchange-CrossTenant-AuthAs",
+      "Value": "Internal"
+    },
+    {
+      "Name": "X-MS-Exchange-CrossTenant-AuthSource",
+      "Value": "MR1P264MB3825.FRAP264.PROD.OUTLOOK.COM"
+    },
+    {
+      "Name": "X-MS-Exchange-CrossTenant-Network-Message-Id",
+      "Value": "aa7d44ea-90dd-4b1f-f25b-08df078c2563"
+    },
+    {
+      "Name": "X-MS-Exchange-CrossTenant-originalarrivaltime",
+      "Value": "31 Aug 2026 18:17:41.3948 (UTC)"
+    },
+    {
+      "Name": "X-MS-Exchange-CrossTenant-fromentityheader",
+      "Value": "Hosted"
+    },
+    {
+      "Name": "X-MS-Exchange-CrossTenant-id",
+      "Value": "4e7b6e5c-c652-4ed4-afd6-9a62a8d60cf6"
+    },
+    {
+      "Name": "X-MS-Exchange-CrossTenant-mailboxtype",
+      "Value": "HOSTED"
+    },
+    {
+      "Name": "X-MS-Exchange-CrossTenant-userprincipalname",
+      "Value": "doS863QDhsSX4moShM3ogMRlD8UAjJWzowMEit4XvbDQZzr/LjvzoUA8hod8ozYHVpzuWB3e/1vUR40EYGpzJmlFmtRUoiL8NCxi594CKIM="
+    },
+    {
+      "Name": "X-MS-Exchange-Transport-CrossTenantHeadersStamped",
+      "Value": "PR1P264MB3600"
+    }
+  ],
+  "Attachments": []
+}

@@ -1,0 +1,116 @@
+{
+  "FromName": "Elie Pothier",
+  "MessageStream": "inbound",
+  "From": "elie.pothier@sfr.fr",
+  "FromFull": {
+    "Email": "elie.pothier@sfr.fr",
+    "Name": "Elie Pothier",
+    "MailboxHash": ""
+  },
+  "To": "3008a0854b4d10a45c36121168c7a665@inbound.postmarkapp.com",
+  "ToFull": [
+    {
+      "Email": "3008a0854b4d10a45c36121168c7a665@inbound.postmarkapp.com",
+      "Name": "",
+      "MailboxHash": ""
+    }
+  ],
+  "Cc": "",
+  "CcFull": [],
+  "Bcc": "",
+  "BccFull": [],
+  "OriginalRecipient": "3008a0854b4d10a45c36121168c7a665@inbound.postmarkapp.com",
+  "Subject": "Test",
+  "MessageID": "218c47a4-897a-46b4-ace6-d4e6b5efffc0",
+  "ReplyTo": "",
+  "MailboxHash": "",
+  "Date": "Mon, 31 Aug 2026 20:14:39 +0200",
+  "TextBody": "Test \n\n\nEnvoyé de mon iPhone\n",
+  "HtmlBody": "",
+  "StrippedTextReply": "",
+  "RawEmail": "Received: by p-pm-inboundg02c-aws-euwest1c.inbound.postmarkapp.com (Postfix, from userid 996)\n\tid CD026453CA2; Mon, 31 Aug 2026 18:14:50 +0000 (UTC)\nX-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on\n\tp-pm-inboundg02c-aws-euwest1c\nX-Spam-Status: No\nX-Spam-Score: 1.9\nX-Spam-Tests: DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,PYZOR_CHECK,\n\tRCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,\n\tRCVD_IN_ZEN_BLOCKED_OPENDNS,SPF_HELO_NONE,SPF_PASS\nReceived-SPF: pass (sfr.fr: 93.17.128.208 is authorized to use 'elie.pothier@sfr.fr' in 'mfrom' identity (mechanism 'ip4:93.17.128.0/24' matched)) receiver=p-pm-inboundg02c-aws-euwest1c; identity=mailfrom; envelope-from=\"elie.pothier@sfr.fr\"; helo=smtp26.services.sfr.fr; client-ip=93.17.128.208\nReceived: from smtp26.services.sfr.fr (smtp26.services.sfr.fr [93.17.128.208])\n\t(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))\n\t(No client certificate requested)\n\tby p-pm-inboundg02c-aws-euwest1c.inbound.postmarkapp.com (Postfix) with ESMTPS id 838D0405139\n\tfor <3008a0854b4d10a45c36121168c7a665@inbound.postmarkapp.com>; Mon, 31 Aug 2026 18:14:50 +0000 (UTC)\nX-mail-filterd: {\"version\":\"1.7.1\",\"queueID\":\"4hYcbG1Rxpz1LQv9f\",\"contextId\":\n \"c85e37be-51be-4c59-842c-aeb421a2b25d\"}\nReceived: from smtpclient.apple (243.44.9.109.rev.sfr.net [109.9.44.243])\n\tby msfrf2630.sfr.fr (SMTP Server) with ESMTP id 4hYcbG1Rxpz1LQv9f\n\tfor <3008a0854b4d10a45c36121168c7a665@inbound.postmarkapp.com>; Mon, 31 Aug 2026 20:14:50 +0200 (CEST)\nX-mail-filterd: {\"version\":\"1.7.1\",\"queueID\":\"4hYcbG0TG3z1LQv9V\",\"contextId\":\n \"6bad5ff9-6e50-4d92-9712-4e42912ef78a\"}\nX-sfr-mailing: LEGIT\nX-sfr-spamrating: 40\nX-sfr-spam: not-spam\nDKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=sfr.fr; s=202006;\n t=1788200090; h=From:Date:Subject:To; bh=efcljuvJ96BJ7VxRyu8OvxGGtLJMPMGtPX//\n  baALSO4=; b=aB+k22Xfb314dgT76/vDjglgaiwnfju4FUapnRexxXYrLiWrzNYVIcb1WCC2RatR\n  4lC5xBb34knuK+W3tFZAIiMa4tGOhx8Uz94QiI5Lvnc0NIxbWYZu63/4P9I7AqWZI9j2Xy1KS4nn\n  mUSi1/L4gqomM9seuGuypgo3t3Oez0aQ+mpidBDo+Hv4Y4Eb1RykvhqOhTmO2CDHLjhP6wOKcVBe\n  QOB5wSV22m5fCsekuPJcKzOATttqEN7WOK8tR9o4gZXYULzcftagcqF9vNfQEsM0agAH9rQ0n1D3\n  PtJD2qYBvjGbqduOFI0oRsq3uYQp7GAyE4YMu/tUf4wELIdA7A==\nReceived: from smtpclient.apple (243.44.9.109.rev.sfr.net [109.9.44.243])\n\t(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))\n\t(No client certificate requested)\n\t(Authenticated sender: elie.pothier@sfr.fr)\n\tby msfrf2630.sfr.fr (SMTP Server) with ESMTPSA id 4hYcbG0TG3z1LQv9V\n\tfor <3008a0854b4d10a45c36121168c7a665@inbound.postmarkapp.com>; Mon, 31 Aug 2026 20:14:50 +0200 (CEST)\nAuthentication-Results: sfr.fr; auth=pass (PLAIN) smtp.auth=elie.pothier@sfr.fr\nContent-Type: text/plain; charset=utf-8\nContent-Transfer-Encoding: quoted-printable\nFrom: Elie Pothier <elie.pothier@sfr.fr>\nMime-Version: 1.0 (1.0)\nDate: Mon, 31 Aug 2026 20:14:39 +0200\nSubject: Test \nMessage-Id: <91808752-2DCD-4ED1-9356-AEE24E29A57D@sfr.fr>\nTo: 3008a0854b4d10a45c36121168c7a665@inbound.postmarkapp.com\nX-Mailer: iPhone Mail (23G71)\n\nTest=20\n\n\nEnvoy=C3=A9 de mon iPhone=\n\n",
+  "Tag": "",
+  "Headers": [
+    {
+      "Name": "Return-Path",
+      "Value": "<elie.pothier@sfr.fr>"
+    },
+    {
+      "Name": "Received",
+      "Value": "by p-pm-inboundg02c-aws-euwest1c.inbound.postmarkapp.com (Postfix, from userid 996)\tid CD026453CA2; Mon, 31 Aug 2026 18:14:50 +0000 (UTC)"
+    },
+    {
+      "Name": "X-Spam-Checker-Version",
+      "Value": "SpamAssassin 3.4.0 (2014-02-07) on\tp-pm-inboundg02c-aws-euwest1c"
+    },
+    {
+      "Name": "X-Spam-Status",
+      "Value": "No"
+    },
+    {
+      "Name": "X-Spam-Score",
+      "Value": "1.9"
+    },
+    {
+      "Name": "X-Spam-Tests",
+      "Value": "DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,PYZOR_CHECK,\tRCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,\tRCVD_IN_ZEN_BLOCKED_OPENDNS,SPF_HELO_NONE,SPF_PASS"
+    },
+    {
+      "Name": "Received-SPF",
+      "Value": "pass (sfr.fr: 93.17.128.208 is authorized to use 'elie.pothier@sfr.fr' in 'mfrom' identity (mechanism 'ip4:93.17.128.0/24' matched)) receiver=p-pm-inboundg02c-aws-euwest1c; identity=mailfrom; envelope-from=\"elie.pothier@sfr.fr\"; helo=smtp26.services.sfr.fr; client-ip=93.17.128.208"
+    },
+    {
+      "Name": "Received",
+      "Value": "from smtp26.services.sfr.fr (smtp26.services.sfr.fr [93.17.128.208])\t(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))\t(No client certificate requested)\tby p-pm-inboundg02c-aws-euwest1c.inbound.postmarkapp.com (Postfix) with ESMTPS id 838D0405139\tfor <3008a0854b4d10a45c36121168c7a665@inbound.postmarkapp.com>; Mon, 31 Aug 2026 18:14:50 +0000 (UTC)"
+    },
+    {
+      "Name": "X-mail-filterd",
+      "Value": "{\"version\":\"1.7.1\",\"queueID\":\"4hYcbG1Rxpz1LQv9f\",\"contextId\": \"c85e37be-51be-4c59-842c-aeb421a2b25d\"}"
+    },
+    {
+      "Name": "Received",
+      "Value": "from smtpclient.apple (243.44.9.109.rev.sfr.net [109.9.44.243])\tby msfrf2630.sfr.fr (SMTP Server) with ESMTP id 4hYcbG1Rxpz1LQv9f\tfor <3008a0854b4d10a45c36121168c7a665@inbound.postmarkapp.com>; Mon, 31 Aug 2026 20:14:50 +0200 (CEST)"
+    },
+    {
+      "Name": "X-mail-filterd",
+      "Value": "{\"version\":\"1.7.1\",\"queueID\":\"4hYcbG0TG3z1LQv9V\",\"contextId\": \"6bad5ff9-6e50-4d92-9712-4e42912ef78a\"}"
+    },
+    {
+      "Name": "X-sfr-mailing",
+      "Value": "LEGIT"
+    },
+    {
+      "Name": "X-sfr-spamrating",
+      "Value": "40"
+    },
+    {
+      "Name": "X-sfr-spam",
+      "Value": "not-spam"
+    },
+    {
+      "Name": "DKIM-Signature",
+      "Value": "v=1; a=rsa-sha256; c=simple/simple; d=sfr.fr; s=202006; t=1788200090; h=From:Date:Subject:To; bh=efcljuvJ96BJ7VxRyu8OvxGGtLJMPMGtPX//  baALSO4=; b=aB+k22Xfb314dgT76/vDjglgaiwnfju4FUapnRexxXYrLiWrzNYVIcb1WCC2RatR  4lC5xBb34knuK+W3tFZAIiMa4tGOhx8Uz94QiI5Lvnc0NIxbWYZu63/4P9I7AqWZI9j2Xy1KS4nn  mUSi1/L4gqomM9seuGuypgo3t3Oez0aQ+mpidBDo+Hv4Y4Eb1RykvhqOhTmO2CDHLjhP6wOKcVBe  QOB5wSV22m5fCsekuPJcKzOATttqEN7WOK8tR9o4gZXYULzcftagcqF9vNfQEsM0agAH9rQ0n1D3  PtJD2qYBvjGbqduOFI0oRsq3uYQp7GAyE4YMu/tUf4wELIdA7A=="
+    },
+    {
+      "Name": "Received",
+      "Value": "from smtpclient.apple (243.44.9.109.rev.sfr.net [109.9.44.243])\t(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))\t(No client certificate requested)\t(Authenticated sender: elie.pothier@sfr.fr)\tby msfrf2630.sfr.fr (SMTP Server) with ESMTPSA id 4hYcbG0TG3z1LQv9V\tfor <3008a0854b4d10a45c36121168c7a665@inbound.postmarkapp.com>; Mon, 31 Aug 2026 20:14:50 +0200 (CEST)"
+    },
+    {
+      "Name": "Authentication-Results",
+      "Value": "sfr.fr; auth=pass (PLAIN) smtp.auth=elie.pothier@sfr.fr"
+    },
+    {
+      "Name": "Mime-Version",
+      "Value": "1.0 (1.0)"
+    },
+    {
+      "Name": "Message-Id",
+      "Value": "<91808752-2DCD-4ED1-9356-AEE24E29A57D@sfr.fr>"
+    },
+    {
+      "Name": "X-Mailer",
+      "Value": "iPhone Mail (23G71)"
+    }
+  ],
+  "Attachments": []
+}
