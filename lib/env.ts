@@ -4,8 +4,20 @@ import { z } from 'zod';
  * Schéma unique des variables d'environnement.
  *
  * Invariant (CLAUDE.md, section B) : aucune lecture de `process.env` ailleurs
- * dans le projet. Toute nouvelle variable est ajoutée ici ET dans `.env.example`
- * dans le même commit.
+ * dans le projet.
+ *
+ * Trois fichiers doivent dire exactement la même chose, et sont modifiés dans
+ * le MÊME commit : le tableau « Liste canonique » de la section B de CLAUDE.md,
+ * ce schéma, et `.env.example`. Une variable ne figurant pas dans les trois
+ * n'existe pas.
+ *
+ * Une variable n'entre ici qu'au lot où un code la lit réellement, jamais par
+ * anticipation : une variable que rien ne lit finit par être fausse sans que
+ * personne s'en aperçoive. Les neuf ci-dessous sont toutes lues par du code du
+ * lot 0a.
+ *
+ * Aucune variable `NEXT_PUBLIC_` : le préfixe n'est pas une convention de
+ * nommage, il inline la valeur dans le bundle client.
  *
  * La validation s'exécute à l'import du module : un import de `env` depuis une
  * route ou un module de `lib/` fait donc échouer bruyamment le build ou le
@@ -29,7 +41,11 @@ const schema = z.object({
       "DATABASE_URL doit pointer sur le pooler en mode transaction (port 6543), jamais sur la connexion directe (5432)",
     ),
 
-  /** URL du projet Supabase, ex. https://<ref>.supabase.co — utilisée pour Storage. */
+  /**
+   * URL du projet Supabase, ex. https://<ref>.supabase.co — lue uniquement par
+   * `lib/supabase/server.ts`, pour l'API Storage. Sans préfixe `NEXT_PUBLIC_`
+   * délibérément : le navigateur ne parle jamais directement à Supabase.
+   */
   SUPABASE_URL: z.string().url('SUPABASE_URL doit être une URL absolue'),
 
   /**

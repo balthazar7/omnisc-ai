@@ -201,6 +201,26 @@ Aucune bibliothèque d'internationalisation, aucune seconde langue en V1 : seule
 
 **Variables d'environnement.** Schéma unique validé par `zod`, importé partout, qui **échoue bruyamment au démarrage** si une variable manque. `.env.example` exhaustif, mis à jour dans le même commit que toute nouvelle variable. Aucune lecture de `process.env` ailleurs.
 
+**Liste canonique.** Trois fichiers doivent dire exactement la même chose, et sont modifiés dans le **même commit** : le tableau ci-dessous, `lib/env.ts`, `.env.example`. Une variable ne figurant pas dans les trois n'existe pas. `.env.local` (ignoré par git, propre à chaque poste) est renseigné d'après `.env.example` ; le tenir à jour est ce qui garde `npm run build` vert en local.
+
+**Une variable que rien ne lit finit par être fausse sans que personne s'en aperçoive** : une variable n'entre dans le schéma qu'au lot où un code la lit réellement, jamais par anticipation.
+
+| Variable | Portée | Introduite au | Rôle |
+|---|---|---|---|
+| `DATABASE_URL` | serveur | 0a | Pooler en mode transaction, port 6543. Le schéma refuse la connexion directe |
+| `SUPABASE_URL` | serveur | 0a | Projet Supabase, pour l'API Storage. **Sans préfixe `NEXT_PUBLIC_` délibérément** |
+| `SUPABASE_SERVICE_ROLE_KEY` | serveur | 0a | Contourne RLS. Ne quitte jamais le serveur |
+| `INBOUND_DOMAIN` | serveur | 0a | Domaine de réception attrape-tout, sans `@` |
+| `POSTMARK_WEBHOOK_USER` | serveur | 0a | Authentification Basic du webhook |
+| `POSTMARK_WEBHOOK_PASSWORD` | serveur | 0a | Idem. Unique protection de la route d'ingestion |
+| `VERCEL_GIT_COMMIT_SHA` | serveur, injectée | 0a | SHA renvoyé par `/api/health`. Optionnelle : absente en local |
+| `VERCEL_ENV` | serveur, injectée | 0a | `production` / `preview` / `development`. Optionnelle |
+| `NODE_ENV` | serveur, injectée | 0a | Posée par Next.js. Dans le schéma pour que rien ne lise `process.env` hors de `lib/env.ts` |
+
+**Aucune variable `NEXT_PUBLIC_` n'existe à ce jour, et c'est un choix.** Le préfixe n'est pas une convention de nommage : Next.js **inline la valeur dans le bundle client**. Publier l'URL Supabase au navigateur contredirait « le navigateur ne parle jamais directement à Supabase » sans rien apporter, l'URL n'étant lue que par `lib/supabase/server.ts`. `NEXT_PUBLIC_SUPABASE_URL` et `NEXT_PUBLIC_SUPABASE_ANON_KEY` reviendront **au lot 1 et seulement s'il tranche pour une authentification côté navigateur** ; avec une authentification côté serveur, elles restent inutiles.
+
+Variables déjà décidées mais **pas encore dans le schéma**, faute de code qui les lise : `CRON_SECRET` (au premier cron), `OUTBOUND_ALLOWLIST` et `OUTBOUND_UNRESTRICTED` (lot 5, avec le premier envoi).
+
 **Runtime.** Postmark **ne signe pas** ses webhooks : il n'existe aucune vérification HMAC, ni en entrée ni en sortie. La protection est l'authentification HTTP Basic encodée dans l'URL du webhook, comparée en **temps constant** avec `crypto.timingSafeEqual`, complétée par la validation de la structure de la charge utile. Le webhook reste en `export const runtime = 'nodejs'`, jamais Edge, mais pour une autre raison : les pièces jointes arrivent en base64 et le traitement demande `Buffer`. Toute route touchant la base → `export const dynamic = 'force-dynamic'`, sinon Next.js tente de la prérendre au build et le build casse en CI alors qu'il passait en local. Bibliothèques **100 % JavaScript** : une dépendance native marchera en local et cassera sur serverless.
 
 **Timeouts.** Aucun traitement lourd dans le chemin de la requête. Le webhook fait trois choses : vérifier l'authentification Basic, écrire le brut, insérer un job. Il répond `200` en moins de 500 ms. Un webhook qui dépasse le timeout est rejoué par Postmark → doublons.
