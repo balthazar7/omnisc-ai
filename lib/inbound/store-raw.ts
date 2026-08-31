@@ -2,7 +2,7 @@ import { randomUUID, timingSafeEqual } from 'node:crypto';
 
 import { env } from '@/lib/env';
 import type { Logger } from '@/lib/logger';
-import { RAW_BUCKET, sql, storage } from '@/lib/supabase/server';
+import { getSql, getStorage, RAW_BUCKET } from '@/lib/supabase/server';
 
 /**
  * Ingestion brute d'un message entrant Postmark — lot 0a.
@@ -302,6 +302,7 @@ export async function handleInboundPostmark(
 
   // 4. Idempotence — après résolution du projet, et pas avant.
   const messageIdHeader = messageIdHeaderOf(payload);
+  const sql = getSql();
   const existing = await sql<{ id: string }[]>`
     select id
       from public.messages
@@ -323,7 +324,7 @@ export async function handleInboundPostmark(
   const rawPath = `${project.id}/${randomUUID()}.json`;
   const rawKey = `${RAW_BUCKET}/${rawPath}`;
 
-  const upload = await storage.from(RAW_BUCKET).upload(rawPath, JSON.stringify(payload), {
+  const upload = await getStorage().from(RAW_BUCKET).upload(rawPath, JSON.stringify(payload), {
     contentType: 'application/json',
     upsert: false,
   });
@@ -420,7 +421,7 @@ export async function handleInboundPostmark(
  * et archiver ne libère qu'une place d'abonnement.
  */
 async function findProject(localParts: string[]): Promise<{ id: string } | null> {
-  const rows = await sql<{ id: string }[]>`
+  const rows = await getSql()<{ id: string }[]>`
     select id
       from public.projects
      where lower(inbound_local_part) = any(${localParts})
