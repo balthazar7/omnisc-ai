@@ -5,8 +5,8 @@ Mémoire du projet entre les sessions. Chargé à chaque session Claude Code. `D
 ## Avancement
 
 - **Partie A — configuration externe : terminée.** Domaine `omnisc-ai.fr` et `.com`, dépôt `omnisc-ai`, Supabase `omnisc-prod` et `omnisc-preview` (région UE), Vercel Pro (Team Omnisc, fonctions à Paris), Postmark serveur Live avec flux entrant sur `in.omnisc-ai.fr` et contenu brut activé, fixtures réelles dans `fixtures/inbound/`.
-- **Lot 0a — squelette marchant : code posé le 31 août 2026, en attente de vérification en production.** `lib/env.ts` (schéma zod, échec bruyant), `lib/logger.ts` (JSON, `request_id`), `lib/supabase/server.ts` (pooler 6543 `prepare: false` + Storage `service_role`), `supabase/migrations/0001_init.sql` (`vector`, `organizations`, `projects`, `messages`, `jobs`, RLS sans policy, `grant … to service_role`, bucket `raw` privé), `lib/inbound/store-raw.ts` et `app/api/inbound/postmark/route.ts`, `app/api/health/route.ts`. Aucun fichier d'interface touché. **Bascule en « terminé » une fois la liste d'acceptation du lot 0a vérifiée en production** — migrations sur `omnisc-preview` puis `omnisc-prod`, `/api/health` à 200 avec le bon SHA, webhook renseigné dans Postmark, e-mail de bout en bout, lecture `anon` refusée.
-- **Lot 0b — design system + bloc Design : à faire.** Écrase `globals.css` et `tailwind.config.ts` : `npx shadcn init` **avant** l'écriture des tokens.
+- **Lot 0a — squelette marchant : terminé le 31 août 2026, vérifié en production.** `lib/env.ts` (schéma zod, échec bruyant), `lib/logger.ts` (JSON, `request_id`), `lib/supabase/server.ts` (pooler 6543 `prepare: false` + Storage `service_role`), `supabase/migrations/0001_init.sql` (`vector`, `organizations`, `projects`, `messages`, `jobs`, RLS sans policy, `grant … to service_role`, bucket `raw` privé), `lib/inbound/store-raw.ts` et `app/api/inbound/postmark/route.ts`, `app/api/health/route.ts`. Aucun fichier d'interface touché. Liste d'acceptation vérifiée en production — migrations sur `omnisc-preview` puis `omnisc-prod`, `/api/health` à 200 avec le bon SHA, webhook renseigné dans Postmark, e-mail de bout en bout, lecture `anon` refusée. Ce que la vérification a appris est consigné en section B, « Constats de production ».
+- **Prochain : lot 0b — design system + bloc Design.** Écrase `globals.css` et `tailwind.config.ts` : `npx shadcn init` **avant** l'écriture des tokens.
 - Chaque lot met cette section à jour avant de se clore.
 
 ---
@@ -258,6 +258,13 @@ Le pooler en mode transaction **ne gère pas les requêtes préparées** : avec 
 **Migrations.** Appliquées à `omnisc-preview`, puis à `omnisc-prod`, via `supabase link --project-ref <ref>` puis `supabase db push`. Pas d'étape locale : `supabase start` réclame Docker Desktop, et la préversion remplit ce rôle. Jamais directement en production, même si le chemin e-mail se développe contre elle. Une migration destructive doit être précédée d'une sauvegarde explicite.
 
 **Fin de lot.** Aucun lot n'est terminé tant qu'il n'est pas déployé **et vérifié** en production.
+
+**Constats de production.** Relevés à la vérification du lot 0a, le 31 août 2026.
+
+- **Postmark ne renvoie pas les CRLF dans `RawEmail`** : ni les charges utiles reçues ni les fixtures n'en contiennent. La vérification DKIM contre le brut stocké est donc impossible. Le lot 2 s'appuiera sur SPF. **Décision à confirmer au lot 2.**
+- **Postmark n'expose pas de rejeu manuel d'un message entrant depuis l'activité.** L'idempotence sur `(project_id, message_id_header)` n'a pas pu être vérifiée en production ; elle le sera au lot 3a.
+- **Tout secret destiné à figurer dans une URL ou un fichier `.env` doit être strictement alphanumérique.** Un `#` dans `DATABASE_URL` a coûté cinq déploiements en échec, avec un `TypeError` anonyme.
+- **Les clients Supabase sont instanciés paresseusement, jamais au niveau du module** : sinon la collecte des pages du build dépend de variables d'exécution.
 
 ---
 
