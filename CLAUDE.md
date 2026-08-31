@@ -1,4 +1,90 @@
-Le lot 0 crée ce fichier à la racine. Il contient les sections ci-dessous, plus le résumé du produit et l'exemple travaillé de la section 2.3, plus une ligne d'avancement que chaque lot met à jour. C'est la mémoire du projet entre les sessions.
+# CLAUDE.md — Omnisc AI
+
+Mémoire du projet entre les sessions. Chargé à chaque session Claude Code. `DESIGN.md`, à la racine, ne l'est pas : toute règle qui doit survivre à un `/clear` vit ici.
+
+## Avancement
+
+- **Partie A — configuration externe : terminée.** Domaine `omnisc-ai.fr` et `.com`, dépôt `omnisc-ai`, Supabase `omnisc-prod` et `omnisc-preview` (région UE), Vercel Pro (Team Omnisc, fonctions à Paris), Postmark serveur Live avec flux entrant sur `in.omnisc-ai.fr` et contenu brut activé, fixtures réelles dans `fixtures/inbound/`.
+- **Lot 0a — squelette marchant : code posé le 31 août 2026, en attente de vérification en production.** `lib/env.ts` (schéma zod, échec bruyant), `lib/logger.ts` (JSON, `request_id`), `lib/supabase/server.ts` (pooler 6543 `prepare: false` + Storage `service_role`), `supabase/migrations/0001_init.sql` (`vector`, `organizations`, `projects`, `messages`, `jobs`, RLS sans policy, `grant … to service_role`, bucket `raw` privé), `lib/inbound/store-raw.ts` et `app/api/inbound/postmark/route.ts`, `app/api/health/route.ts`. Aucun fichier d'interface touché. **Bascule en « terminé » une fois la liste d'acceptation du lot 0a vérifiée en production** — migrations sur `omnisc-preview` puis `omnisc-prod`, `/api/health` à 200 avec le bon SHA, webhook renseigné dans Postmark, e-mail de bout en bout, lecture `anon` refusée.
+- **Lot 0b — design system + bloc Design : à faire.** Écrase `globals.css` et `tailwind.config.ts` : `npx shadcn init` **avant** l'écriture des tokens.
+- Chaque lot met cette section à jour avant de se clore.
+
+---
+
+## 0. Le produit
+
+Un projet d'entreprise implique plusieurs sociétés. L'information de coordination — qui s'est engagé à quoi, quelle décision a été prise, quelle version fait foi — vit dans les e-mails, éparpillée entre les boîtes de quinze personnes appartenant à des organisations différentes.
+
+Les outils de suivi existants échouent parce qu'ils **exigent une saisie manuelle** que personne ne fait. Omnisc lit l'information là où elle est déjà. Personne ne change d'outil.
+
+**Conséquence directe pour la conception : l'interface est une surface de lecture, pas de saisie.** Presque aucun formulaire. Le seul geste fréquent est de poser une question.
+
+Avantage défendable : les fournisseurs de messagerie ne voient qu'un seul tenant, jamais l'autre moitié d'une conversation inter-entreprises. Toute fonctionnalité qui n'exploite pas ce caractère inter-entreprises est de faible priorité.
+
+### Exemple travaillé — la référence pour toute extraction
+
+Trois messages, sur trois semaines :
+
+```
+De : marc.deleuze@fabrik-industries.fr
+À : claire.b@meridian.fr
+Cc : p-k3n8xq2a@in.omnisc-ai.fr
+Date : 4 février, 09:12
+Objet : RE: Planning production Meridian
+
+Bonjour Claire,
+Après validation avec l'atelier, nous pouvons livrer les 2 000 premières
+unités le 12 mars. Il nous faut le BAT définitif avant le 20 février,
+sans quoi la date saute.
+Cordialement, Marc
+```
+
+```
+De : claire.b@meridian.fr
+À : julie.roux@studio-nord.com
+Cc : marc.deleuze@fabrik-industries.fr, p-k3n8xq2a@in.omnisc-ai.fr
+Date : 5 février, 14:40
+Objet : BAT packaging — urgent
+
+Julie, peux-tu nous confirmer que le BAT sera prêt avant le 20/02 ?
+Marc en a besoin pour tenir la date de production.
+```
+
+```
+De : marc.deleuze@fabrik-industries.fr
+À : claire.b@meridian.fr
+Cc : p-k3n8xq2a@in.omnisc-ai.fr
+Date : 28 février, 17:03
+Objet : RE: Planning production Meridian
+
+Sans BAT, nous décalons. Nouvelle date de livraison : 3 avril.
+```
+
+Faits extraits — **c'est le format d'annotation attendu** :
+
+| Type | Acteur | Énoncé | Échéance | Statut |
+|---|---|---|---|---|
+| engagement | Marc / Fabrik | Livrer 2 000 unités | 12 mars | **remplacé** par le fait du 28/02 |
+| demande | Marc → Claire | BAT définitif requis | 20 février | ouvert |
+| demande | Claire → Julie | Confirmer que le BAT sera prêt | 20 février | **ouvert, sans réponse** |
+| engagement | Marc / Fabrik | Livrer 2 000 unités | 3 avril | actif |
+
+Le troisième fait est le cœur du produit : **Julie n'a jamais répondu**. Aucun message ne le dit. C'est une absence — elle ne se cherche pas, elle se calcule, parce qu'une demande a été enregistrée comme objet et qu'aucun message ultérieur ne l'a satisfaite.
+
+Réponse attendue du chat :
+
+> **Claire :** *Où en est-on sur la production ?*
+>
+> **Agent :** Livraison de 2 000 unités annoncée au 3 avril. Cette date remplace un engagement précédent au 12 mars, décalé faute de BAT. `[Marc Deleuze — Fabrik Industries, 28 février]`
+>
+> Point bloquant : votre demande du 5 février à Julie Roux, sur la confirmation du BAT avant le 20 février, est restée sans réponse. `[Claire Berthier, 5 février]`
+
+Digest du lundi :
+
+> **Sans réponse depuis 23 jours** — Confirmation du BAT demandée à Julie Roux (Studio Nord), échéance dépassée le 20 février.
+> **Modifié cette semaine** — Livraison Fabrik : 12 mars → 3 avril.
+
+---
 
 ## A. Invariants d'architecture
 
@@ -28,20 +114,24 @@ Le lot 0 crée ce fichier à la racine. Il contient les sections ci-dessous, plu
 
 **Périmètre d'accès unique.** Tout membre de l'équipe interroge tout le corpus. Pas de liste de contrôle d'accès par fragment.
 
+**Qui a un compte.** En V1, seul l'organisateur du projet possède un compte. Il déclare les adresses des personnes à qui il ouvre le chat ; celles-ci sont libres de créer un compte ou non. L'accès est nominatif et **total** : toute personne autorisée interroge l'intégralité du corpus, sans filtrage par fil ni par paire d'entités. Toute demande de granularité plus fine est un changement d'architecture des couches 1 à 3, pas un réglage — s'arrêter et demander.
+
 **Le corpus est partagé, l'historique de conversation est privé.** Chaque utilisateur a ses propres conversations, invisibles des autres, y compris du chef de projet. Ce sont deux choses distinctes : ne pas confondre avec le périmètre d'accès.
 
 **Aucune réponse sans citation.** Le chat cite ses sources et refuse de conclure au-delà des éléments disponibles. Le domaine a des conséquences contractuelles.
 
-**Sécurité de l'ingestion.** Quatre niveaux de confiance :
+**Sécurité de l'ingestion.** Cinq niveaux de confiance :
 
 | Niveau | Condition | Traitement |
 |---|---|---|
 | `trusted` | DKIM/SPF valides **et** au moins un membre du projet en expéditeur ou destinataire, hors agent | Ingestion complète |
+| `rapporte` | Message imbriqué extrait d'un transfert : pas de DKIM propre, authentifié seulement par le transféreur | Ingéré, faits extraits, mais citation à deux niveaux : source d'origine **et** transféreur. Ne monte jamais à `trusted` |
 | `suspect` | Expéditeur connu, aucun autre membre en copie | Stocké, **aucun fait extrait**. Signalé au digest |
 | `quarantine` | Expéditeur inconnu, ou aucun membre en copie, ou DKIM/SPF en échec | Non ingéré. Alerte au chef de projet, approbation en un clic |
 | `rejected` | Réponse automatique, publicité, liste noire | Supprimé sans alerte |
 
 - **DKIM/SPF est obligatoire** : une adresse d'expéditeur se falsifie trivialement, le contrôle d'appartenance seul est contournable.
+- **Un message imbriqué n'a pas de DKIM.** Seul le transféreur est authentifié. N'importe quel participant peut donc fabriquer une chaîne attribuant un engagement à un tiers. `rapporte` ne monte jamais à `trusted`, et toute citation issue d'un message imbriqué porte les deux sources : l'auteur d'origine et celui qui a transféré.
 - **Isolation des instructions** : le contenu des messages n'est jamais concaténé au même niveau que les consignes du modèle. Séparation par balises, consigne explicite indiquant que c'est une donnée à analyser, sortie contrainte par schéma. Un message contenant « ignore les instructions précédentes » doit produire un fait décrivant cette phrase, pas un changement de comportement.
 - **Amorçage** : le chef de projet est fiable par définition, il déclare les adresses attendues, les participants apparaissant dans ses fils sont ajoutés automatiquement.
 
@@ -62,9 +152,21 @@ type NormalizedMessage = {
 
 `trust_level` est calculé **par l'adaptateur**, jamais par le pipeline. Le seuil de triage est réglable par canal.
 
+**Un transfert est N messages, pas un.** Le décitationnage et le découpage d'une chaîne transférée sont le même problème — repérer les blocs d'en-têtes imbriqués dans un corps — mais l'un jette ce que l'autre conserve. Le pipeline **découpe**, il ne nettoie pas.
+
+- Chercher d'abord une partie MIME `message/rfc822` : un transfert en pièce jointe conserve les en-têtes d'origine intacts, avec vrai `Message-ID`, vraie date et vrai fuseau. C'est le cas fiable, à traiter en priorité.
+- À défaut, analyser les séparateurs en clair, propres à chaque client et à chaque langue : `---------- Message transféré ----------`, `Début du message transféré :`, `De : / Envoyé : / À : / Objet :`, `-------- Message transféré --------`, et les préfixes de sujet `Tr:`, `Fwd:`, `FW:`, `WG:`, `RV:`, que l'utilisateur peut aussi avoir effacés.
+- **En cas d'échec de reconnaissance, conserver le message entier comme un seul message et n'extraire aucune date absolue de son corps.** Un découpage raté en silence produit des échéances fausses de plusieurs semaines.
+- Une date lue dans un en-tête en clair n'a pas de fuseau et est souvent tronquée à la minute : la stocker avec un indicateur de précision, jamais comme une date exacte.
+- **Résoudre les dates relatives contre le `sent_at` du message imbriqué, jamais contre celui du transfert.** « Avant vendredi » écrit le 4 février et transféré le 3 avril se résoudrait deux mois trop tard.
+
 **Traçabilité des appels IA.** Aucun appel à un modèle ne se fait hors du wrapper qui journalise dans `llm_runs`, quel que soit le lot. Les prompts vivent dans `lib/prompts/<clé>.ts`, exportent une clé et un numéro de version, et sont **référencés par clé** au point d'appel — jamais écrits en dur dans le code métier. Sans cela le journal ne peut pas dire quelle version a produit quel résultat, et il ne sert à rien.
 
+**Traçabilité des envois.** Aucun e-mail ne part hors de `lib/email/send.ts`, qui refuse tout destinataire absent de `OUTBOUND_ALLOWLIST` tant que `OUTBOUND_UNRESTRICTED` n'est pas explicitement activé. Le risque n'est pas en prévisualisation mais en production, où les projets réels comptent de vrais participants chez plusieurs sociétés : une boucle de digest y écrirait à quinze personnes. À implémenter au lot 5, avec le premier envoi — pas avant.
+
 **Aucun échec silencieux.** Un message qui ne peut pas être traité passe en `ingest_status = 'failed'` avec l'erreur conservée, apparaît dans le bandeau de la vue projet au même titre que la quarantaine, et reste rejouable via `/api/admin/reprocess`. Pour un produit dont la promesse est la mémoire, une perte de donnée invisible est le pire défaut possible.
+
+**Réconciliation d'ingestion.** Le webhook est en poussée : un message que Postmark n'a pas pu remettre — corps trop volumineux, dépassement de délai, fenêtre de déploiement — n'existe nulle part chez nous, et aucun contrôle interne ne peut le détecter. Un job quotidien interroge l'API des messages entrants de Postmark, compare la liste de ce qu'il a reçu avec le contenu de `messages`, et fait remonter tout écart dans le bandeau de la vue projet, au même titre que la quarantaine. C'est la seule défense possible contre les `413`, les dépassements de délai et les fenêtres de déploiement. À implémenter au lot 3.
 
 **Adresses orphelines.** Le domaine est en attrape-tout : n'importe qui peut écrire à une adresse qui ne correspond à aucun projet. Ces messages sont comptés et rejetés sans stockage du contenu. Ne jamais créer de projet implicitement à partir d'une adresse inconnue.
 
@@ -88,32 +190,47 @@ Aucune bibliothèque d'internationalisation, aucune seconde langue en V1 : seule
 
 **Zéro donnée client vers une API hébergée hors UE.**
 
+---
+
 ## B. Contraintes de déploiement
 
 **Le squelette marchant d'abord.** Le lot 0 construit la boucle complète, vide, en production : domaine → MX vers Postmark → app Next.js déployée → webhook sur l'URL de production → un e-mail envoyé → visible dans Supabase de production. Tant qu'elle ne tourne pas, aucun autre lot ne commence. Prévoir un environnement `preview` avec son propre projet Supabase.
 
 **Variables d'environnement.** Schéma unique validé par `zod`, importé partout, qui **échoue bruyamment au démarrage** si une variable manque. `.env.example` exhaustif, mis à jour dans le même commit que toute nouvelle variable. Aucune lecture de `process.env` ailleurs.
 
-**Runtime.** Le webhook Postmark exige le corps brut pour vérifier la signature → `export const runtime = 'nodejs'`, jamais Edge. Toute route touchant la base → `export const dynamic = 'force-dynamic'`, sinon Next.js tente de la prérendre au build et le build casse en CI alors qu'il passait en local. Bibliothèques **100 % JavaScript** : une dépendance native marchera en local et cassera sur serverless.
+**Runtime.** Postmark **ne signe pas** ses webhooks : il n'existe aucune vérification HMAC, ni en entrée ni en sortie. La protection est l'authentification HTTP Basic encodée dans l'URL du webhook, comparée en **temps constant** avec `crypto.timingSafeEqual`, complétée par la validation de la structure de la charge utile. Le webhook reste en `export const runtime = 'nodejs'`, jamais Edge, mais pour une autre raison : les pièces jointes arrivent en base64 et le traitement demande `Buffer`. Toute route touchant la base → `export const dynamic = 'force-dynamic'`, sinon Next.js tente de la prérendre au build et le build casse en CI alors qu'il passait en local. Bibliothèques **100 % JavaScript** : une dépendance native marchera en local et cassera sur serverless.
 
-**Timeouts.** Aucun traitement lourd dans le chemin de la requête. Le webhook fait trois choses : vérifier la signature, écrire le brut, insérer un job. Il répond `200` en moins de 500 ms. Un webhook qui dépasse le timeout est rejoué par Postmark → doublons.
+**Timeouts.** Aucun traitement lourd dans le chemin de la requête. Le webhook fait trois choses : vérifier l'authentification Basic, écrire le brut, insérer un job. Il répond `200` en moins de 500 ms. Un webhook qui dépasse le timeout est rejoué par Postmark → doublons.
+
+**Charge utile du webhook.** Le contenu brut du message est demandé à Postmark (`Include raw email content`) : sans lui, la couche 0 n'archive pas le message mais l'interprétation qu'en a faite Postmark, et la rejouabilité disparaît — on perd la structure MIME, les encodages exacts, les parties `message/rfc822` et l'intégralité des en-têtes. Contrepartie assumée : les pièces jointes voyagent deux fois, en base64 dans `Attachments` et de nouveau dans le MIME brut. Une fonction Vercel plafonne à **4,5 Mo** de corps de requête et renvoie `413 FUNCTION_PAYLOAD_TOO_LARGE` au-delà ; c'est une limite d'infrastructure qu'aucun réglage de `vercel.json` ne déplace. Le plafond réel de pièce jointe est donc de l'ordre de 1,5 à 2 Mo, et au-delà le message est perdu — d'où la réconciliation d'ingestion de la section A.
 
 **Base de données.** Chaîne de connexion **du pooler en mode transaction** (port 6543), jamais la connexion directe : serverless + Postgres direct = épuisement des connexions en production, invisible en local. La clé `service_role` ne quitte jamais le serveur. Migrations = **fichiers SQL versionnés dans le dépôt**, appliqués par la CLI Supabase ; aucune modification via l'interface web. `create extension if not exists vector;` dans la première migration. **RLS activée dès la première migration.**
 
+Le pooler en mode transaction **ne gère pas les requêtes préparées** : avec `postgres.js`, passer `prepare: false`. Sans cela le code marche en local, sur connexion directe, et échoue en production. Les migrations ne passent pas par le pooler : `supabase link --project-ref <ref>` puis `supabase db push`.
+
+**Clés étrangères différées.** Une colonne qui référence une table pas encore créée est posée en `uuid null`, **sans contrainte**. La contrainte est ajoutée par la migration du lot qui crée la table cible. C'est le cas de `messages.source_id` et `messages.thread_id`, posées au lot 0a, contraintes au lot 3a. Sans cette règle, la première migration devrait créer des tables vides dont personne ne connaît encore les colonnes.
+
+**L'exposition automatique des tables au Data API est désactivée sur les deux projets Supabase.** Toute migration créant une table doit donc inclure `grant select, insert, update, delete on public.<table> to service_role;` et **rien** à `anon` ni à `authenticated`. Sans ce `grant`, même `service_role` reçoit `42501 permission denied for table`.
+
+**RLS est un filet de sécurité, pas le mécanisme d'accès.** Le navigateur ne parle jamais directement à Supabase : tout passe par le serveur Next.js, via les fonctions de `lib/` de signature `(userId, projectId, params)`, avec la clé `service_role` qui contourne RLS par conception. RLS est activée sur toutes les tables, **sans aucune policy**, ce qui refuse tout aux clés `anon` et `authenticated`. Le contrôle d'accès réel vit dans `lib/` et nulle part ailleurs. Envisager un accès client direct exigerait d'écrire des policies exhaustives au préalable — jamais au fil de l'eau.
+
 **Cron.** Routes HTTP protégées par un `CRON_SECRET` comparé en temps constant. Vérifier la fréquence minimale autorisée par le plan avant de concevoir la cadence.
 
-**Régions.** Fonctions Vercel et projet Supabase dans la même région européenne.
+**Régions.** Fonctions Vercel et projet Supabase dans la même région européenne. En production : fonctions à Paris (`cdg1`), Supabase en région UE correspondante.
 
 **Protection de déploiement.** Les previews Vercel peuvent renvoyer `401` aux webhooks. Le webhook pointe **toujours** vers le domaine de production.
 
-**Exploitabilité.** Journalisation structurée JSON avec `request_id` propagé de bout en bout. Le brut de chaque message est stocké et `/api/admin/reprocess` permet de le retraiter : sans cela, chaque bug d'ingestion en production coûte une demi-journée. Idempotence de bout en bout, clé sur `Message-ID`.
+**Exploitabilité.** Journalisation structurée JSON avec `request_id` propagé de bout en bout. Ne jamais journaliser l'en-tête `Authorization`. Le brut de chaque message est stocké et `/api/admin/reprocess` permet de le retraiter : sans cela, chaque bug d'ingestion en production coûte une demi-journée.
+
+**Idempotence.** Clé sur `Message-ID` pour les messages reçus directement. Un message imbriqué extrait d'un transfert n'en a pas — il a disparu au rendu : lui calculer une **empreinte synthétique** sur (adresse d'expéditeur normalisée, date analysée à la minute, sujet normalisé, N premiers caractères du corps nettoyé). Cette empreinte est calculée **aussi** pour les messages reçus directement, sans quoi le même message reçu en copie puis retrouvé dans un transfert produira deux faits identiques. Le recouvrement est le cas normal, pas l'exception : on transfère une suite justement parce qu'une partie manque, donc l'autre partie est déjà en base.
 
 **Git et retour arrière.** `main` est la production. Toute évolution passe par une branche et son déploiement de prévisualisation. En cas de problème en production, le retour arrière se fait par la promotion du déploiement précédent sur Vercel, pas par un correctif dans l'urgence.
 
-**Migrations.** Testées en local via la CLI Supabase, puis appliquées au projet de prévisualisation, puis à la production. Jamais directement en production, même si le chemin e-mail se développe contre elle. Une migration destructive doit être précédée d'une sauvegarde explicite.
+**Migrations.** Appliquées à `omnisc-preview`, puis à `omnisc-prod`, via `supabase link --project-ref <ref>` puis `supabase db push`. Pas d'étape locale : `supabase start` réclame Docker Desktop, et la préversion remplit ce rôle. Jamais directement en production, même si le chemin e-mail se développe contre elle. Une migration destructive doit être précédée d'une sauvegarde explicite.
 
 **Fin de lot.** Aucun lot n'est terminé tant qu'il n'est pas déployé **et vérifié** en production.
 
+---
 
 ## B bis. Design
 
@@ -126,15 +243,21 @@ Aucune bibliothèque d'internationalisation, aucune seconde langue en V1 : seule
 - Une seule exception au premier point : le digest e-mail, où les variables CSS ne fonctionnent pas. Les valeurs hexadécimales et les polices système du bloc e-mail de `DESIGN.md` s'y appliquent, et nulle part ailleurs.
 - Mode clair uniquement en V1. La structure des variables prévoit le mode sombre, on ne l'implémente pas.
 - Desktop d'abord, largeur de référence 1440 px.
+- **Ordre d'installation impératif au lot 0** : `shadcn/ui` s'initialise **avant** l'écriture des tokens. Son initialisation écrase `globals.css` et `tailwind.config.ts` ; dans l'autre ordre, les tokens sont perdus silencieusement.
+
+> **À compléter au lot 0.** Les règles ci-dessus sont des règles de procédé. Il manque ici les règles visuelles concrètes, à extraire de `DESIGN.md` : quelle couleur pour quel type d'information, densité d'une ligne de liste, bordure ou ombre, signalement d'un élément en retard, rendu d'une citation. Dix à quinze lignes impératives, puis renvoi à `DESIGN.md` pour le reste.
+
+---
 
 ## C. Stack
 
 | Brique | Choix |
 |---|---|
 | Application | Next.js 15 App Router, TypeScript strict |
-| Hébergement | Vercel Pro, région UE |
+| Hébergement | Vercel Pro, fonctions région `cdg1` (Paris) |
 | Base | Supabase — PostgreSQL, pgvector, Auth, Storage, RLS — région UE |
-| E-mail entrant et sortant | Postmark |
+| E-mail entrant et sortant | Postmark, serveur Live `omnisc-prod` |
+| Domaine de réception | `in.omnisc-ai.fr`, lu depuis `INBOUND_DOMAIN`. La base ne stocke que `projects.inbound_local_part` ; le domaine n'apparaît **nulle part en dur**, le nom du produit n'étant pas arrêté |
 | File de traitement | Table `jobs` + Vercel Cron |
 | PDF | `unpdf`, JavaScript pur. Pas d'OCR |
 | Embeddings | `text-embedding-3-small` |
@@ -142,6 +265,8 @@ Aucune bibliothèque d'internationalisation, aucune seconde langue en V1 : seule
 | Chat, réconciliation, digest | Claude Sonnet |
 | Chemin d'écriture | En mode batch, schéma d'extraction mis en cache |
 | Paiement | Hors V1 — liens de paiement manuels, habilitations mises à jour à la main sur `organizations` |
+
+---
 
 ## D. Schéma de données
 
@@ -157,7 +282,8 @@ email_addresses   address, identity_id, project_id, verified_at
 messages          id, project_id, source_id, message_id_header, in_reply_to,
                   references[], thread_id, from_address, to[], cc[], sent_at,
                   subject, body_clean, raw_key, channel_kind, trust_level,
-                  trust_reason, ingest_status
+                  trust_reason, fingerprint, ingest_status, ingest_error,
+                  created_at
 attachments       id, message_id, filename, mime, storage_key, text
 threads           id, project_id, subject_norm, first_seen, last_seen,
                   digest, digest_stale
@@ -179,11 +305,17 @@ llm_runs          id, project_id, task, model, prompt_key, prompt_version,
 
 - `identities` / `email_addresses` : séparation **indispensable**. Une même personne apparaît sous plusieurs adresses ; sans réconciliation, aucun suivi d'engagement n'est fiable.
 - `facts.type` : `engagement`, `demande`, `decision`, `echeance`, `risque`. `facts.status` : `ouvert`, `satisfait`, `remplace`, `annule`. `facts.origin` : `extracted`, `user`.
-- `messages.ingest_status` : `pending`, `processing`, `done`, `skipped`, `failed`. `failed` doit être visible dans l'interface, pas seulement en base.
+- `messages.ingest_status` : `pending`, `processing`, `done`, `skipped`, `failed`. `failed` doit être visible dans l'interface, pas seulement en base. `messages.ingest_error` conserve l'erreur en clair : aucun échec silencieux.
+- `messages.message_id_header` est l'en-tête **RFC `Message-ID`**, lu dans `Headers` de la charge utile Postmark — **pas** le champ `MessageID` de premier niveau, qui est l'identifiant interne de Postmark. Repli sur `postmark:<MessageID>` quand l'en-tête est absent. C'est la clé de l'index unique `(project_id, message_id_header)`.
+- `messages.fingerprint` : empreinte synthétique d'idempotence de la section A. Colonne créée au lot 0a pour éviter une migration ultérieure sur la table la plus chargée ; **remplie au lot 3b**, nulle avant. Index unique partiel `where fingerprint is not null`.
+- `messages."to"` et `messages."references"` sont des mots réservés SQL : toujours cités entre guillemets doubles dans les requêtes.
+- **`memberships.user_id` est nullable.** Une invitation est une ligne avec `identity_id` renseigné et `user_id` vide, résolue à l'inscription par appariement de l'adresse vérifiée. Sans cela il est impossible d'ouvrir le chat à quelqu'un qui n'a pas encore de compte — or c'est le cas nominal, les participants étant libres de s'inscrire ou non.
 - `conversations.user_id` : c'est ce qui rend l'historique de chat privé.
 - **L'abonnement appartient à l'organisation, jamais au projet ni à l'utilisateur.** La grille tarifaire se compte en projets actifs inclus, et le titulaire du compte doit être l'entreprise pour que le projet survive au départ de son chef de projet. `projects.status` : `active`, `archived` — archiver libère une place.
 - `llm_runs.task` : `triage`, `extract`, `reconcile`, `state`, `chat`, `digest`.
 - Pas de liste de contrôle d'accès sur `chunks` : conséquence du périmètre unique.
+
+---
 
 ## E. Hors périmètre — ne pas coder
 
@@ -202,9 +334,12 @@ Claude Code a tendance à anticiper ; c'est ce qui fait déraper les délais.
 - Tests exhaustifs — uniquement le harnais d'évaluation de l'extraction et des tests sur le parsing e-mail
 - Seconde langue, bibliothèque d'internationalisation, sélecteur de langue — seules les quatre coutures de la section A sont posées
 - Mise en cache sophistiquée, files externes, microservices
-- Tout écran ne figurant pas dans la liste de la section 3
+- Tout écran ne figurant pas dans la liste des écrans de la V1
 
-Deux pièges du mode transaction :
+---
 
-Il ne prend pas en charge les requêtes préparées. Si le code utilise postgres.js, il faut prepare: false ; sinon ça marche en local et échoue en production.
-Les migrations ne passent pas par lui : elles s'appliquent via supabase link --project-ref <ref> puis supabase db push, qui utilise la connexion directe.
+## F. Règle de conduite
+
+**Ne pas deviner.** S'il manque une décision — un nom de champ, un comportement, un choix d'affichage — s'arrêter et demander, au lieu d'inventer. Une décision inventée devient une convention en une session et un défaut structurel en cinq. C'est le principal mode de dérive sur une vingtaine de sessions.
+
+**Un lot = une session = un `/clear`.** Chaque lot se termine sur un état déployé et vérifié en production, jamais sur une production cassée, et met à jour la section Avancement de ce fichier avant de se clore.
