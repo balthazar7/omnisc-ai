@@ -1,6 +1,7 @@
 import { getSql } from '@/lib/supabase/server';
 import { planLimits } from '@/lib/entitlements';
 import { getDictionary } from '@/lib/i18n';
+import { createLogger } from '@/lib/logger';
 
 /** L'organisation d'un utilisateur, réduite à ce que les écrans affichent. */
 export type Organization = {
@@ -54,26 +55,66 @@ export async function ensureOrganizationForUser(userId: string): Promise<Organiz
   const plan = 'trial';
   const limit = planLimits(plan).maxActiveProjects;
 
-  // Création de l'organisation et de l'appartenance dans une seule transaction :
-  // une organisation sans membre serait invisible et orpheline, et l'utilisateur
-  // s'en verrait créer une nouvelle à chaque connexion.
-  const created = await sql.begin(async (tx) => {
-    const [org] = await tx<
-      { id: string; name: string; plan: string; max_active_projects: number }[]
-    >`
-      insert into public.organizations (name, plan, max_active_projects)
-      values (${t.org.defaultName}, ${plan}, ${limit})
-      returning id, name, plan, max_active_projects
-    `;
+  const log = createLogger(crypto.randomUUID(), { event_source: 'orgs.ensure' });
 
-    await tx`
-      insert into public.organization_members (org_id, user_id, role)
-      values (${org.id}, ${userId}, 'owner')
-      on conflict (org_id, user_id) do nothing
-    `;
+  /*
+    Les deux insertions sont dans UNE SEULE transaction : une organisation sans
+    membre serait invisible et orpheline, et l'utilisateur s'en verrait créer une
+    nouvelle à chaque connexion.
 
-    return org;
-  });
+    Conséquence à connaître au diagnostic : si la seconde insertion échoue, la
+    PREMIÈRE est annulée aussi. Voir `organizations` ET `organization_members`
+    vides ne signifie donc pas que ce code ne s'exécute pas — c'est au contraire
+    la signature d'un échec sur l'insertion de l'appartenance.
+
+    Le cas le plus probable est `23503` sur `organization_members.user_id`, qui
+    référence `auth.users` : l'utilisateur n'existe pas dans le `auth.users` de
+    la base où l'on écrit. Cela arrive quand le déploiement authentifie contre un
+    projet Supabase et écrit dans un autre — variables `NEXT_PUBLIC_SUPABASE_*`
+    et `DATABASE_URL` pointant deux projets différents.
+  */
+  let created: { id: string; name: string; plan: string; max_active_projects: number };
+
+  try {
+    created = await sql.begin(async (tx) => {
+      const [org] = await tx<
+        { id: string; name: string; plan: string; max_active_projects: number }[]
+      >`
+        insert into public.organizations (name, plan, max_active_projects)
+        values (${t.org.defaultName}, ${plan}, ${limit})
+        returning id, name, plan, max_active_projects
+      `;
+
+      await tx`
+        insert into public.organization_members (org_id, user_id, role)
+        values (${org.id}, ${userId}, 'owner')
+        on conflict (org_id, user_id) do nothing
+      `;
+
+      return org;
+    });
+  } catch (error) {
+    // On journalise puis on relance : l'échec doit rester bruyant. Sans cette
+    // trace, la seule chose observable était une page en 500 et deux tables
+    // vides, sans rien qui nomme la cause.
+    const code =
+      typeof error === 'object' && error !== null && 'code' in error
+        ? String((error as { code?: unknown }).code)
+        : 'unknown';
+
+    log.exception('orgs.ensure.failed', error, {
+      pg_code: code,
+      hint:
+        code === '23503'
+          ? "user_id absent de auth.users dans la base d'écriture : le déploiement " +
+            'authentifie probablement contre un projet Supabase et écrit dans un autre'
+          : undefined,
+    });
+
+    throw error;
+  }
+
+  log.info('orgs.ensure.created', { org_id: created.id });
 
   return {
     id: created.id,
