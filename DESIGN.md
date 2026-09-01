@@ -118,8 +118,10 @@ Règles : `text-wrap: pretty` sur tout paragraphe long et tout titre de plus de 
 Pas de grille stricte de 4px : l'échelle est resserrée et impaire par endroits. Valeurs autorisées :
 
 ```
-1  2  3  4  5  6  7  8  9  10  11  12  13  14  16  18  20  22  24  26  28  30  32  44  60  64  70  80  90
+1  2  3  4  5  6  7  8  9  10  11  12  13  14  15  16  17  18  20  22  24  26  28  30  32  44  60  64  70  78  80  90
 ```
+
+`15`, `17` et `78` ont été ajoutés au lot 0b : la liste d'origine les omettait alors que §6.1 (padding des boutons `md` et `sm`) et §6.12 (diamètre de la jauge) les emploient déjà. Cette liste fait foi ; une valeur qui n'y figure pas n'a pas le droit d'apparaître dans un composant. Elle est transcrite dans `spaceScale` (`design/tokens.ts`).
 
 Usages canoniques :
 
@@ -141,18 +143,25 @@ Usages canoniques :
 
 ## 4. Rayons
 
-| Élément | Rayon |
-|---|---|
-| Pilule, bouton, badge, chip | `999px` |
-| Carte majeure / hero | 30-34px |
-| Carte standard | 26-28px |
-| Sous-carte, encart | 20-24px |
-| Ligne de liste, champ | 14-18px |
-| Puce, jeton d'icône | 7-13px |
-| Surlignage `<mark>` | 5px |
-| Avatar | `50%` |
+| Élément | Rayon | Valeur retenue | Jeton |
+|---|---|---|---|
+| Pilule, bouton, badge, chip | `999px` | 999px | `--r-pill` |
+| Carte majeure / hero | 30-34px | 32px | `--r-hero` |
+| Carte standard | 26-28px | 26px | `--r-card` |
+| Carte KPI (§6.8) | 22px | 22px | `--r-panel` |
+| Sous-carte, encart | 20-24px | 20px | `--r-sub` |
+| Bulle de conversation (§6.10) | 18px | 18px | `--r-bubble` |
+| Coin « queue » de bulle (§6.10) | 6px | 6px | `--r-bubble-tail` |
+| Ligne de liste | 14-18px | 16px | `--r-row` |
+| Champ (§6.6) | 14px | 14px | `--r-field` |
+| Élément de navigation (§6.3) | 13px | 13px | `--r-nav` |
+| Puce, jeton d'icône | 7-13px | 10px | `--r-chip` |
+| Surlignage `<mark>` | 5px | 5px | `--r-mark` |
+| Avatar | `50%` | 50% | `--r-avatar` |
 
 Rien n'a un rayon nul. Le rayon décroît avec l'imbrication : 30 → 24 → 16.
+
+La colonne « valeur retenue » a été arrêtée au lot 0b : les fourchettes ne sont pas utilisables telles quelles par un composant. Elles restent indicatives, c'est la valeur retenue qui fait foi, et elle est transcrite dans `radius` (`design/tokens.ts`).
 
 ---
 

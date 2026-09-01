@@ -1,26 +1,306 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/*
+  Ce fichier ne contient AUCUNE valeur du système de design.
+  Les valeurs vivent dans `design/tokens.ts` et sont injectées dans `:root` par
+  `app/layout.tsx` via `themeCss()`. Ici on ne fait que rattacher ces variables
+  aux espaces de noms Tailwind, pour que `bg-glass`, `text-body`, `rounded-card`
+  ou `shadow-card` existent comme classes.
+
+  Modifier une couleur, une taille ou un rayon = modifier `design/tokens.ts`,
+  et rien d'autre.
+
+  Mode clair uniquement en V1. La structure prévoit le mode sombre
+  (`themes` dans tokens.ts, variant ci-dessous), on ne l'implémente pas.
+*/
+
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* ---- police : DESIGN.md §1.1, aucune seconde famille ---- */
+  --font-sans: var(--font-manrope), system-ui, sans-serif;
+  --font-heading: var(--font-sans);
+  --font-mono: var(--font-sans);
+
+  /* ---- espacement : DESIGN.md §3, unité 1px pour que p-18 vaille 18px ---- */
+  --spacing: var(--space-unit);
+
+  /* ---- surfaces : DESIGN.md §1.2 ---- */
+  --color-page: var(--bg);
+  --color-glass: var(--glass);
+  --color-glass-2: var(--glass2);
+  --color-glass-3: var(--glass3);
+
+  /* ---- traits ---- */
+  --color-stroke: var(--stroke);
+  --color-hair: var(--hair);
+  --color-hair-2: var(--hair2);
+
+  /* ---- texte ---- */
+  --color-ink: var(--text);
+  --color-ink-2: var(--text2);
+  --color-ink-3: var(--text3);
+
+  /* ---- accent / alerte / validé ---- */
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-line: var(--accent-line);
+  --color-alert: var(--alert);
+  --color-alert-soft: var(--alert-soft);
+  --color-alert-line: var(--alert-line);
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --color-on-accent: var(--on-accent);
+
+  /* ---- alias sémantiques attendus par shadcn/ui, remappés sur nos jetons ----
+     Aucune classe shadcn ne peut ainsi retomber sur une couleur hors système. */
+  --color-background: var(--bg);
+  --color-foreground: var(--text);
+  --color-card: var(--glass);
+  --color-card-foreground: var(--text);
+  --color-popover: var(--glass);
+  --color-popover-foreground: var(--text);
+  --color-primary: var(--accent);
+  --color-primary-foreground: var(--on-accent);
+  --color-secondary: var(--glass2);
+  --color-secondary-foreground: var(--text);
+  --color-muted: var(--glass2);
+  --color-muted-foreground: var(--text3);
+  --color-accent-foreground: var(--on-accent);
+  --color-destructive: var(--alert);
+  --color-destructive-foreground: var(--on-accent);
+  --color-border: var(--stroke);
+  --color-input: var(--hair2);
+  --color-ring: var(--accent-line);
+
+  /* ---- rayons : DESIGN.md §4 ---- */
+  --radius-pill: var(--r-pill);
+  --radius-hero: var(--r-hero);
+  --radius-card: var(--r-card);
+  --radius-panel: var(--r-panel);
+  --radius-sub: var(--r-sub);
+  --radius-bubble: var(--r-bubble);
+  --radius-bubble-tail: var(--r-bubble-tail);
+  --radius-row: var(--r-row);
+  --radius-field: var(--r-field);
+  --radius-nav: var(--r-nav);
+  --radius-chip: var(--r-chip);
+  --radius-mark: var(--r-mark);
+  --radius-avatar: var(--r-avatar);
+  /* échelle générique de shadcn, rebranchée sur la nôtre : rien n'a un rayon nul */
+  --radius-sm: var(--r-chip);
+  --radius-md: var(--r-nav);
+  --radius-lg: var(--r-field);
+  --radius-xl: var(--r-sub);
+  --radius-2xl: var(--r-panel);
+  --radius-3xl: var(--r-card);
+  --radius-4xl: var(--r-hero);
+
+  /* ---- élévation : DESIGN.md §5 ---- */
+  --shadow-card: var(--elev-card);
+  --shadow-hero: var(--elev-hero);
+  --shadow-pill: var(--shade-pill);
+  --shadow-flat: var(--shade);
+  --shadow-accent-lg: var(--shade-accent-lg);
+  --shadow-accent-md: var(--shade-accent-md);
+  --shadow-accent-block: var(--shade-accent-block);
+
+  /* ---- typographie : DESIGN.md §2 ---- */
+  --text-landing: var(--fs-landing);
+  --text-landing--font-weight: var(--fw-landing);
+  --text-landing--letter-spacing: var(--ls-landing);
+  --text-landing--line-height: var(--lh-landing);
+
+  --text-section: var(--fs-section);
+  --text-section--font-weight: var(--fw-section);
+  --text-section--letter-spacing: var(--ls-section);
+  --text-section--line-height: var(--lh-section);
+
+  --text-card-major: var(--fs-card-major);
+  --text-card-major--font-weight: var(--fw-card-major);
+  --text-card-major--letter-spacing: var(--ls-card-major);
+  --text-card-major--line-height: var(--lh-card-major);
+
+  --text-screen: var(--fs-screen);
+  --text-screen--font-weight: var(--fw-screen);
+  --text-screen--letter-spacing: var(--ls-screen);
+  --text-screen--line-height: var(--lh-screen);
+
+  --text-panel: var(--fs-panel);
+  --text-panel--font-weight: var(--fw-panel);
+  --text-panel--letter-spacing: var(--ls-panel);
+  --text-panel--line-height: var(--lh-panel);
+
+  --text-kpi: var(--fs-kpi);
+  --text-kpi--font-weight: var(--fw-kpi);
+  --text-kpi--letter-spacing: var(--ls-kpi);
+  --text-kpi--line-height: var(--lh-kpi);
+
+  --text-kpi-hero: var(--fs-kpi-hero);
+  --text-kpi-hero--font-weight: var(--fw-kpi-hero);
+  --text-kpi-hero--letter-spacing: var(--ls-kpi-hero);
+  --text-kpi-hero--line-height: var(--lh-kpi-hero);
+
+  --text-subtitle: var(--fs-subtitle);
+  --text-subtitle--font-weight: var(--fw-subtitle);
+  --text-subtitle--letter-spacing: var(--ls-subtitle);
+  --text-subtitle--line-height: var(--lh-subtitle);
+
+  --text-lead: var(--fs-lead);
+  --text-lead--font-weight: var(--fw-lead);
+  --text-lead--letter-spacing: var(--ls-lead);
+  --text-lead--line-height: var(--lh-lead);
+
+  --text-body-lg: var(--fs-body-lg);
+  --text-body-lg--font-weight: var(--fw-body-lg);
+  --text-body-lg--letter-spacing: var(--ls-body-lg);
+  --text-body-lg--line-height: var(--lh-body-lg);
+
+  --text-row-label: var(--fs-row-label);
+  --text-row-label--font-weight: var(--fw-row-label);
+  --text-row-label--letter-spacing: var(--ls-row-label);
+  --text-row-label--line-height: var(--lh-row-label);
+
+  --text-bubble: var(--fs-bubble);
+  --text-bubble--font-weight: var(--fw-bubble);
+  --text-bubble--letter-spacing: var(--ls-bubble);
+  --text-bubble--line-height: var(--lh-bubble);
+
+  --text-body: var(--fs-body);
+  --text-body--font-weight: var(--fw-body);
+  --text-body--letter-spacing: var(--ls-body);
+  --text-body--line-height: var(--lh-body);
+
+  --text-dense: var(--fs-dense);
+  --text-dense--font-weight: var(--fw-dense);
+  --text-dense--letter-spacing: var(--ls-dense);
+  --text-dense--line-height: var(--lh-dense);
+
+  --text-meta: var(--fs-meta);
+  --text-meta--font-weight: var(--fw-meta);
+  --text-meta--letter-spacing: var(--ls-meta);
+  --text-meta--line-height: var(--lh-meta);
+
+  --text-field: var(--fs-field);
+  --text-field--font-weight: var(--fw-field);
+  --text-field--letter-spacing: var(--ls-field);
+  --text-field--line-height: var(--lh-field);
+
+  --text-caption: var(--fs-caption);
+  --text-caption--font-weight: var(--fw-caption);
+  --text-caption--letter-spacing: var(--ls-caption);
+  --text-caption--line-height: var(--lh-caption);
+
+  --text-micro: var(--fs-micro);
+  --text-micro--font-weight: var(--fw-micro);
+  --text-micro--letter-spacing: var(--ls-micro);
+  --text-micro--line-height: var(--lh-micro);
+
+  --text-tiny: var(--fs-tiny);
+  --text-tiny--font-weight: var(--fw-tiny);
+  --text-tiny--letter-spacing: var(--ls-tiny);
+  --text-tiny--line-height: var(--lh-tiny);
+
+  /* ---- mouvement : DESIGN.md §7, deux courbes seulement ---- */
+  --ease-enter: var(--curve-enter);
+  --ease-interact: var(--curve-interact);
+  --animate-rise: var(--anim-rise);
+  --animate-rise-page: var(--anim-rise-page);
+  --animate-fade: var(--anim-fade);
+  --animate-grow: var(--anim-grow);
+  --animate-dash: var(--anim-dash);
+  --animate-halo: var(--anim-halo);
+  --animate-sweep: var(--anim-sweep);
+
+  /* ---- layout : DESIGN.md §8 ---- */
+  --container-app: var(--w-app);
+  --container-landing: var(--w-landing);
+  --container-onboarding: var(--w-onboarding);
+  --container-bubble: var(--w-bubble);
+  --container-col-nav: var(--col-nav);
+  --container-col-aside: var(--col-aside);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* DESIGN.md §7 — les six seules animations du système. */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px) scale(.985); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes halo {
+  0%, 100% { opacity: .55; transform: scale(1); }
+  50%      { opacity: .95; transform: scale(1.9); }
+}
+@keyframes sweep {
+  from { transform: translateX(-110%); }
+  to   { transform: translateX(320%); }
+}
+@keyframes grow {
+  from { width: 0; }
+}
+@keyframes dash {
+  from { stroke-dashoffset: 320; }
+}
+
+@layer base {
+  * {
+    border-color: var(--stroke);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    /* DESIGN.md §1.1 — obligatoire : tous les chiffres sont alignés */
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* DESIGN.md §2 — text-wrap: pretty sur tout paragraphe long et tout titre. */
+  p, h1, h2, h3, h4 {
+    text-wrap: pretty;
+  }
+
+  /* DESIGN.md §7 */
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .01ms !important; }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /*
+    DESIGN.md §5 — matière. Le liseré `--inset` est systématique sur toute
+    surface `--glass`. Ces classes évitent de recomposer quatre déclarations à
+    chaque carte, et sont le seul endroit où `backdrop-filter` est écrit.
+  */
+  .surface {
+    background: var(--glass);
+    border: 1px solid var(--stroke);
+    box-shadow: var(--elev-card);
+    backdrop-filter: var(--filter-card);
+    -webkit-backdrop-filter: var(--filter-card);
+  }
+
+  .surface-hero {
+    background: var(--glass);
+    border: 1px solid var(--stroke);
+    box-shadow: var(--elev-hero);
+    backdrop-filter: var(--filter-hero);
+    -webkit-backdrop-filter: var(--filter-hero);
+  }
+
+  .surface-control {
+    backdrop-filter: var(--filter-control);
+    -webkit-backdrop-filter: var(--filter-control);
+  }
+
+  /* Une carte mise en avant remplace --stroke par --accent-line, ou --alert-line
+     si le sujet est un manque. DESIGN.md §5. */
+  .surface-accent { border-color: var(--accent-line); }
+  .surface-alert  { border-color: var(--alert-line); }
 }
