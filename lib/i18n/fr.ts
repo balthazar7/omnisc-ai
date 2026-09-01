@@ -147,6 +147,93 @@ export const fr = {
   common: {
     collapse: "Replier",
     expand: "Déplier",
+    cancel: "Annuler",
+    save: "Enregistrer",
+    back: "Retour aux projets",
+    signOut: "Se déconnecter",
+  },
+
+  org: {
+    /** Nom donné à l'organisation créée à la première connexion. Renommable. */
+    defaultName: "Mon organisation",
+  },
+
+  auth: {
+    title: "Se connecter",
+    lead: "Entrez votre adresse. Vous recevrez un lien de connexion, sans mot de passe à retenir.",
+    emailLabel: "Adresse e-mail",
+    emailPlaceholder: "vous@votre-societe.fr",
+    submit: "Recevoir le lien",
+    /*
+      Message volontairement identique dans tous les cas : adresse inconnue,
+      adresse hors liste d'autorisation, ou envoi réussi. Il ne doit jamais être
+      possible de savoir si un compte existe.
+    */
+    sent: "Si cette adresse est valide, un lien de connexion vient d'être envoyé. Il expire dans une heure.",
+    invalidEmail: "Cette adresse ne semble pas valide.",
+    failed: "L'envoi a échoué. Réessayez dans un instant.",
+    linkExpired: "Ce lien a expiré ou a déjà été utilisé. Demandez-en un nouveau.",
+  },
+
+  projects: {
+    title: "Projets",
+    empty: "Aucun projet pour l'instant.",
+    emptyLead: "Créez un projet, mettez son adresse en copie de vos échanges, et Omnisc suit le reste.",
+    create: "Créer un projet",
+    archivedBadge: "Archivé",
+    activeBadge: "Actif",
+    quotaLabel: "Projets actifs",
+    quotaReached:
+      "Votre plan est à sa limite de projets actifs. Archivez un projet pour libérer une place.",
+    addressColumn: "Adresse du projet",
+    nameColumn: "Projet",
+    statusColumn: "Statut",
+
+    new: {
+      title: "Nouveau projet",
+      lead: "Le nom sert à vous repérer. L'adresse en est dérivée, puis elle ne change plus.",
+      nameLabel: "Nom du projet",
+      namePlaceholder: "Levée de fonds Startup",
+      previewLabel: "Adresse générée",
+      previewNote:
+        "Aperçu indicatif : les quatre derniers caractères sont tirés au hasard à la création.",
+      submit: "Créer le projet",
+      nameRequired: "Donnez un nom au projet.",
+      quotaError:
+        "Votre plan est à sa limite de projets actifs. Archivez un projet pour libérer une place.",
+      addressError:
+        "L'adresse n'a pas pu être générée. Réessayez, ou changez légèrement le nom du projet.",
+    },
+
+    detail: {
+      addressLabel: "Adresse du projet",
+      addressHelp:
+        "Mettez cette adresse en copie de vos e-mails de projet. Rien d'autre à faire : ni compte à créer pour vos interlocuteurs, ni outil à changer.",
+      copy: "Copier l'adresse",
+      copied: "Adresse copiée",
+      settings: "Réglages",
+    },
+
+    settings: {
+      title: "Réglages du projet",
+      nameLabel: "Nom du projet",
+      rename: "Renommer",
+      renamed: "Nom modifié.",
+      /* Dit à l'écran, parce que c'est contre-intuitif et que s'en apercevoir trop tard coûte des messages. */
+      renameNote:
+        "Renommer ne change pas l'adresse du projet : elle figure en copie de fils déjà en cours.",
+      addressLabel: "Adresse du projet",
+      addressFixed: "Définitive, elle ne peut pas être modifiée.",
+      archiveTitle: "Archiver le projet",
+      archiveNote:
+        "Un projet archivé continue de recevoir et de conserver les e-mails envoyés à son adresse. Il n'est simplement plus traité, et il libère une place dans votre plan.",
+      archive: "Archiver",
+      unarchive: "Réactiver",
+      archived: "Projet archivé.",
+      unarchived: "Projet réactivé.",
+      unarchiveQuotaError:
+        "Votre plan est à sa limite de projets actifs. Archivez un autre projet pour réactiver celui-ci.",
+    },
   },
 } as const;
 

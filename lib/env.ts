@@ -221,6 +221,56 @@ const schema = z.object({
     .string()
     .min(12, 'POSTMARK_WEBHOOK_PASSWORD doit faire au moins 12 caractères'),
 
+  /**
+   * Projet Supabase et clé publique, pour le client d'AUTHENTIFICATION seul.
+   *
+   * Ces deux variables portent le préfixe `NEXT_PUBLIC_` alors que le lot 1a ne
+   * les lit que côté serveur : le lien magique est entièrement traité par des
+   * routes et des actions serveur. Le préfixe est délibéré — c'est le nom sous
+   * lequel elles sont renseignées dans Vercel, et le jour où un composant client
+   * aura besoin du client d'authentification, il les lira sans nouvelle variable.
+   *
+   * `NEXT_PUBLIC_` n'est pas une convention de nommage : Next.js inline la
+   * valeur dans le bundle client, mais uniquement pour les occurrences
+   * LITTÉRALES de `process.env.NEXT_PUBLIC_…`. Lues ici via
+   * `schema.safeParse(process.env)`, elles ne sont pas inlinées et restent
+   * serveur. Aucune fuite au demeurant : la clé `anon` est publique par
+   * conception et ne donne accès à rien — RLS est activée partout sans policy,
+   * et le client d'authentification ne touche jamais au schéma `public`.
+   */
+  NEXT_PUBLIC_SUPABASE_URL: z.string().superRefine((value, ctx) => {
+    const fail = (message: string) => ctx.addIssue({ code: 'custom', message });
+
+    if (value.length === 0) {
+      fail('NEXT_PUBLIC_SUPABASE_URL est vide');
+      return;
+    }
+
+    try {
+      new URL(value);
+    } catch {
+      fail(
+        `NEXT_PUBLIC_SUPABASE_URL n'est pas analysable par new URL() — valeur reçue : ${preview(value)}. ` +
+          'Attendu : une URL absolue de la forme https://<ref>.supabase.co',
+      );
+    }
+  }),
+
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1, 'NEXT_PUBLIC_SUPABASE_ANON_KEY est vide'),
+
+  /**
+   * Contrôle des inscriptions pendant la phase de test.
+   *
+   * Adresses séparées par des virgules. **Vide par défaut = inscription
+   * ouverte** ; renseignée, seules ces adresses obtiennent un lien magique. Le
+   * domaine est public et le produit enverra des e-mails dès le lot 5 : une
+   * porte fermable pendant la phase de test coûte cinq lignes.
+   *
+   * Lue côté serveur uniquement. L'écran de connexion ne dit jamais si une
+   * adresse est autorisée : il répond la même chose dans tous les cas.
+   */
+  SIGNUP_ALLOWLIST: z.string().default(''),
+
   /** Injecté par Vercel. Optionnel : absent en local. */
   VERCEL_GIT_COMMIT_SHA: z.string().optional(),
 
