@@ -2,6 +2,7 @@ import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
 import { env } from '@/lib/env';
+import { createLogger } from '@/lib/logger';
 
 /**
  * Client Supabase d'AUTHENTIFICATION.
@@ -34,10 +35,23 @@ export async function createAuthClient() {
             cookieStore.set(name, value, options);
           }
         } catch {
-          // Un composant serveur ne peut pas écrire de cookie : Next.js lève.
-          // Ce n'est pas une erreur — le rafraîchissement de session est fait
-          // par le middleware, qui, lui, dispose d'une réponse à modifier.
-          // Avaler ici est la marche à suivre documentée de @supabase/ssr.
+          /*
+            Un composant serveur ne peut pas écrire de cookie : Next.js lève.
+            C'est la marche à suivre documentée de @supabase/ssr — le
+            rafraîchissement est fait par le middleware, qui dispose d'une
+            réponse à modifier.
+
+            MAIS AVALER SANS TRACE EST DANGEREUX : si le middleware ne couvre
+            pas la route, Supabase a déjà fait tourner le jeton de
+            rafraîchissement côté serveur alors que le nouveau jeton n'est
+            jamais posé. La session devient alors invalide à la requête
+            suivante, sans le moindre message. On journalise donc les NOMS des
+            cookies perdus, jamais leurs valeurs.
+          */
+          createLogger(crypto.randomUUID(), { event_source: 'auth.client' }).warn(
+            'auth.cookies.write_refused',
+            { sb_token_keys: cookiesToSet.map((c) => c.name) },
+          );
         }
       },
     },

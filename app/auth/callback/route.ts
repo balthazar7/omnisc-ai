@@ -1,3 +1,4 @@
+import { cookies } from 'next/headers';
 import { NextResponse, type NextRequest } from 'next/server';
 
 import { createAuthClient } from '@/lib/supabase/auth';
@@ -23,6 +24,25 @@ export async function GET(request: NextRequest) {
 
   const supabase = await createAuthClient();
   const { error } = await supabase.auth.exchangeCodeForSession(code);
+
+  /*
+    Trace de l'échange : c'est le seul endroit où la session est POSÉE. Si la
+    requête suivante ne trouve aucun cookie `sb-*`, la comparaison entre ce
+    qu'on a écrit ici et ce qui revient là-bas dit lequel des deux côtés est
+    fautif. Noms seulement, jamais les valeurs.
+  */
+  if (!error) {
+    const jar = await cookies();
+    const written = jar
+      .getAll()
+      .map((c) => c.name)
+      .filter((name) => name.startsWith('sb-'));
+
+    log.info('auth.callback.session_established', {
+      sb_token_keys: written,
+      sb_token_count: written.length,
+    });
+  }
 
   if (error) {
     // Le message d'erreur ne remonte pas à l'utilisateur : un lien expiré et un
