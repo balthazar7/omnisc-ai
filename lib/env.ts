@@ -277,6 +277,15 @@ const schema = z.object({
   /** Injecté par Vercel : 'production' | 'preview' | 'development'. Optionnel. */
   VERCEL_ENV: z.string().optional(),
 
+  /**
+   * Nom de la branche git du déploiement. Injecté par Vercel, absent en local.
+   *
+   * Lu par la barre d'environnement (`components/dev/env-bar.tsx`), qui n'existe
+   * qu'en dehors de la production et disparaît au lot 7 avec `/design`. La
+   * variable sort du schéma le jour où la barre est supprimée.
+   */
+  VERCEL_GIT_COMMIT_REF: z.string().optional(),
+
   /** Posé par Next.js. Présent ici pour que rien ne lise `process.env` hors de ce module. */
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
 });

@@ -144,6 +144,26 @@ export const fr = {
     removalNotice: "Cette page est supprimée au lot 7.",
   },
 
+  /*
+    Barre d'environnement — PROVISOIRE, supprimée au lot 7 avec /design.
+    Ces libellés partent avec `components/dev/env-bar.tsx`.
+  */
+  envBar: {
+    localBranch: "branche locale",
+    unknownRef: "inconnu",
+    signedOut: "non connecté",
+    refAuth: "auth",
+    refStorage: "storage",
+    refDatabase: "sql",
+    links: {
+      home: "Accueil",
+      login: "Connexion",
+      projects: "Projets",
+      organization: "Organisation",
+      design: "Design",
+    },
+  },
+
   common: {
     collapse: "Replier",
     expand: "Déplier",

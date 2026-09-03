@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 
+import { EnvBar } from "@/components/dev/env-bar";
 import { themeCss } from "@/design/css";
+import { env } from "@/lib/env";
 import { getDictionary } from "@/lib/i18n";
 
 import "./globals.css";
@@ -24,6 +26,18 @@ export const metadata: Metadata = {
   description: t.app.description,
 };
 
+/**
+ * BARRE D'ENVIRONNEMENT — JAMAIS EN PRODUCTION, À AUCUNE CONDITION.
+ *
+ * Le garde est ici, hors du composant, et il porte sur `VERCEL_ENV` seul : en
+ * production le composant n'est pas rendu du tout, donc `getUser()` n'y est pas
+ * appelé et les pages statiques le restent. Un garde placé DANS la barre aurait
+ * rendu le layout dynamique partout, production comprise.
+ *
+ * Supprimée au lot 7, avec `/design`.
+ */
+const SHOW_ENV_BAR = env.VERCEL_ENV !== 'production';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -39,6 +53,7 @@ export default function RootLayout({
           `tokens.ts` suffit donc à changer le rendu de toute l'application.
         */}
         <style dangerouslySetInnerHTML={{ __html: themeCss() }} />
+        {SHOW_ENV_BAR && <EnvBar />}
         {children}
       </body>
     </html>

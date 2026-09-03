@@ -233,6 +233,7 @@ Aucune bibliothèque d'internationalisation, aucune seconde langue en V1 : seule
 | `SIGNUP_ALLOWLIST` | serveur | 1a | Adresses séparées par des virgules. **Vide = inscription ouverte** |
 | `VERCEL_GIT_COMMIT_SHA` | serveur, injectée | 0a | SHA renvoyé par `/api/health`. Optionnelle : absente en local |
 | `VERCEL_ENV` | serveur, injectée | 0a | `production` / `preview` / `development`. Optionnelle |
+| `VERCEL_GIT_COMMIT_REF` | serveur, injectée | 1b | Nom de la branche. Lue par la barre d'environnement seule. **Sort du schéma au lot 7**, avec elle |
 | `NODE_ENV` | serveur, injectée | 0a | Posée par Next.js. Dans le schéma pour que rien ne lise `process.env` hors de `lib/env.ts` |
 
 **Les deux variables `NEXT_PUBLIC_` du lot 1a ne sont pas une entorse à la règle, mais elles méritent l'explication.** Le préfixe n'est pas une convention de nommage : Next.js **inline la valeur dans le bundle client** — mais uniquement pour les occurrences **littérales** de `process.env.NEXT_PUBLIC_…`. Lues via `schema.safeParse(process.env)` dans `lib/env.ts`, elles ne sont pas inlinées et restent serveur : le lot 1a traite le lien magique entièrement en routes et actions serveur. Le préfixe est conservé parce que c'est le nom sous lequel elles sont renseignées dans Vercel, et parce que le jour où un composant client aura besoin du client d'authentification, il les lira sans nouvelle variable. Aucune fuite au demeurant : la clé `anon` est publique par conception et ne donne accès à rien — RLS est activée partout sans policy, et ce client ne touche jamais au schéma `public`.
@@ -418,6 +419,7 @@ Claude Code a tendance à anticiper ; c'est ce qui fait déraper les délais.
 - Tableau de bord configurable, vues nommées, filtres ou tri paramétrables, export, partage externe
 - Création ou édition de faits par l'utilisateur, hors le bouton « ce fait est faux »
 - Interface d'inspection de `llm_runs` — la table existe, l'écran attend la V1.1
+- **À SUPPRIMER AU LOT 7, avec `/design`** : la barre d'environnement (`components/dev/env-bar.tsx`, son appel dans `app/layout.tsx`, le bloc `envBar` de `lib/i18n/fr.ts`, `lib/supabase/project-ref.ts` si rien d'autre ne le lit, et `VERCEL_GIT_COMMIT_REF` dans le schéma, `.env.example` et le tableau des variables). Elle n'est jamais rendue en production — le garde est dans `RootLayout`, sur `VERCEL_ENV` — mais elle reste un écran de diagnostic, pas un écran de la V1
 - Agents spécialisés par métier
 - Application mobile, PWA, manifeste, service worker, API JSON — seule la règle « logique métier dans `lib/` » est appliquée
 - Tests exhaustifs — uniquement le harnais d'évaluation de l'extraction et des tests sur le parsing e-mail
