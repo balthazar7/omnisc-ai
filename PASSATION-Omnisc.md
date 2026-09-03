@@ -14,8 +14,9 @@ en deux sessions.
 | `DESIGN.md` | non | Source de vérité visuelle. Échelle typographique, valeurs d'espacement, les douze composants, layouts d'écran. À ouvrir dès qu'on touche à l'interface. |
 | `PASSATION-Omnisc.md` | non | Ce fichier. État du chantier et reprise. |
 
-La section « Avancement » de `CLAUDE.md` est la seule source sur ce qui est
-fait. Ce fichier ne la recopie pas.
+Le lot en cours et son périmètre se lisent dans la section « Avancement » de `CLAUDE.md`. Ce fichier ne la
+recopie pas : deux endroits qui disent l'état du chantier finissent par ne plus dire la même chose, et c'est
+celui qui n'est pas chargé automatiquement qui pourrit.
 
 ## 2. Où l'on travaille
 
@@ -59,13 +60,11 @@ Le détail de ces deux constats, et de tous les autres, est en section B de
 Cette liste est le seul contenu propre à ce fichier. **Elle se vide, elle ne
 s'accumule pas** : ce qui est traité en sort dans le même commit.
 
-- **Critère 7 du lot 1a — isolation entre comptes : non vérifié.** Bloqué par
-  l'approbation du compte Postmark, qui n'autorise l'envoi qu'entre adresses
-  d'un même domaine — donc pas de second compte de test. C'est le contrôle
-  d'accès du produit, et il est sans preuve d'exécution. À faire dès
-  l'approbation.
-- **`request_id` non propagé dans `lib/orgs.ts`.** Le logger y fabrique son
-  propre UUID : ses lignes ne se rapprochent d'aucune autre de la même requête.
-  Faire descendre le logger de la requête jusqu'à `ensureOrganizationForUser`.
-- **`body.json` traîne non suivi à la racine** alors qu'un commit l'a retiré du
-  dépôt. À supprimer ou à ignorer explicitement.
+- **Lot 1b : liste d'acceptation non passée en production.** Le code est déployé et la migration 0003 est
+  appliquée sur les deux projets Supabase, mais les quinze points de la liste d'acceptation restent à
+  vérifier avec les deux comptes réels. Tant qu'ils ne le sont pas, le lot n'est pas terminé.
+- **`body.json` traîne non suivi à la racine** alors qu'un commit l'a retiré du dépôt. À supprimer ou à
+  ignorer explicitement.
+
+Fermé au lot 1b, pour mémoire : le critère 7 du lot 1a est vérifié (03/09), le compte Postmark est approuvé
+(03/09), et le `request_id` de `lib/orgs.ts` est propagé via `loggerForHeaders`.
