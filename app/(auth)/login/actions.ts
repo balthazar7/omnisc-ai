@@ -6,37 +6,11 @@ import { redirect } from 'next/navigation';
 import { env } from '@/lib/env';
 import { createAuthClient } from '@/lib/supabase/auth';
 import { isSignupAllowed } from '@/lib/auth/signup-allowlist';
-import { createLogger } from '@/lib/logger';
+import { requestOrigin, safeInternalPath } from '@/lib/http/origin';
+import { loggerForHeaders } from '@/lib/logger';
 
 /** Chemin de retour du lien magique. Une seule écriture, partagée avec le journal. */
 const CALLBACK_PATH = '/auth/callback';
-
-/**
- * Origine de la requête courante.
- *
- * Calculée à partir des en-têtes plutôt que d'une variable d'environnement :
- * chaque déploiement de prévisualisation a sa propre URL, et un lien magique
- * qui renverrait toujours vers la production fonctionnerait en production et
- * échouerait en préversion — le pire ordre pour s'en apercevoir.
- *
- * LE PROTOCOLE, LUI, N'EST PAS LU DANS LES EN-TÊTES SUR VERCEL. On a observé un
- * `redirect_to` en `http://` sur la préversion. Vercel n'accepte pas le trafic
- * en clair : la connexion est coupée avant toute réponse, et le navigateur
- * affiche `ERR_CONNECTION_RESET` — indiscernable d'un blocage réseau local.
- * C'est ce qui a coûté une session entière de diagnostic. `x-forwarded-proto`
- * n'est donc consulté qu'en dehors d'un déploiement ; partout ailleurs, le
- * protocole est `https` par construction et rien ne peut le dégrader.
- *
- * Hors Vercel, le défaut est `http` : c'est le développement local, où `https`
- * produirait un lien injoignable sur `localhost`.
- */
-async function requestOrigin(): Promise<string> {
-  const headerList = await headers();
-  const host = headerList.get('x-forwarded-host') ?? headerList.get('host') ?? '';
-  const deployed = env.VERCEL_ENV === 'preview' || env.VERCEL_ENV === 'production';
-  const proto = deployed ? 'https' : (headerList.get('x-forwarded-proto') ?? 'http');
-  return `${proto}://${host}`;
-}
 
 /** Validation d'adresse volontairement permissive : le seul juge est le message reçu. */
 function looksLikeEmail(value: string): boolean {
@@ -59,11 +33,19 @@ function looksLikeEmail(value: string): boolean {
 export async function requestMagicLink(formData: FormData): Promise<void> {
   const email = String(formData.get('email') ?? '').trim();
 
-  if (!looksLikeEmail(email)) redirect('/login?error=invalid');
+  /*
+    `next` porte le retour vers la page d'invitation : quelqu'un qui arrive par
+    un lien doit y revenir après s'être connecté, sinon il atterrit sur ses
+    projets et doit rouvrir le lien à la main. Assaini avant tout usage — un
+    `next` non filtré ferait de cet écran une redirection ouverte.
+  */
+  const next = safeInternalPath(String(formData.get('next') ?? ''), '/projects');
 
-  const log = createLogger(crypto.randomUUID(), { event_source: 'auth.magic_link' });
+  const log = loggerForHeaders(await headers(), { event_source: 'auth.magic_link' });
 
-  if (!isSignupAllowed(email)) {
+  if (!looksLikeEmail(email)) redirect(`/login?error=invalid&next=${encodeURIComponent(next)}`);
+
+  if (!(await isSignupAllowed(email))) {
     // Journalisé pour qu'un refus reste diagnosticable, mais l'écran ne le dit
     // pas : la réponse est identique à celle d'un envoi réussi.
     log.info('auth.magic_link.not_allowlisted');
@@ -72,7 +54,7 @@ export async function requestMagicLink(formData: FormData): Promise<void> {
 
   const supabase = await createAuthClient();
   const origin = await requestOrigin();
-  const redirectTo = `${origin}${CALLBACK_PATH}`;
+  const redirectTo = `${origin}${CALLBACK_PATH}?next=${encodeURIComponent(next)}`;
 
   /*
     L'URL demandée est journalisée AVANT l'envoi, et telle quelle.

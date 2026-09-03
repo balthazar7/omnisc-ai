@@ -27,7 +27,9 @@ export default async function NewProjectPage({
       ? t.projects.new.quotaError
       : error === 'address'
         ? t.projects.new.addressError
-        : null;
+        : error === 'org'
+          ? t.projects.noOrganizationError
+          : null;
 
   return (
     <main className="mx-auto flex max-w-onboarding flex-col gap-24 px-28 pt-64 pb-90">

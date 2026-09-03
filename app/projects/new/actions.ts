@@ -23,7 +23,15 @@ export async function createProject(formData: FormData): Promise<void> {
   const result = await createProjectForUser(user.id, name);
 
   if (!result.ok) {
-    redirect(`/projects/new?error=${result.reason === 'quota' ? 'quota' : 'address'}`);
+    /*
+      `no-organization` est distinct de `quota` : le premier veut dire que
+      l'organisation propriétaire n'a pas été retrouvée — session anormale — le
+      second qu'elle existe et qu'elle est pleine. Les confondre enverrait
+      quelqu'un archiver un projet pour rien.
+    */
+    const reason =
+      result.reason === 'quota' ? 'quota' : result.reason === 'no-organization' ? 'org' : 'address';
+    redirect(`/projects/new?error=${reason}`);
   }
 
   redirect(`/p/${result.project.inboundLocalPart}`);

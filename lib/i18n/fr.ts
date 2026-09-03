@@ -151,11 +151,91 @@ export const fr = {
     save: "Enregistrer",
     back: "Retour aux projets",
     signOut: "Se déconnecter",
+    copy: "Copier le lien",
+    copied: "Lien copié",
   },
 
   org: {
     /** Nom donné à l'organisation créée à la première connexion. Renommable. */
     defaultName: "Mon organisation",
+
+    title: "Organisation",
+    nav: "Organisation",
+    nameLabel: "Nom de l'organisation",
+    rename: "Renommer",
+    renamed: "Nom modifié.",
+    nameRequired: "Donnez un nom à l'organisation.",
+    nameTooLong: "60 caractères au maximum.",
+
+    membersTitle: "Membres",
+    memberColumn: "Adresse",
+    roleColumn: "Rôle",
+    joinedColumn: "Membre depuis",
+    actionsColumn: "",
+    roleOwner: "Propriétaire",
+    roleMember: "Membre",
+    remove: "Retirer",
+    removed: "Membre retiré.",
+    removeFailed: "Ce membre n'a pas pu être retiré.",
+
+    invitationsTitle: "Invitations en attente",
+    invitationsEmpty: "Aucune invitation en attente.",
+    expiresColumn: "Expire le",
+    revoke: "Révoquer",
+    revoked: "Invitation révoquée.",
+
+    inviteTitle: "Ajouter un membre à l'organisation",
+    inviteEmailLabel: "Adresse e-mail",
+    inviteEmailPlaceholder: "personne@societe.fr",
+    inviteSubmit: "Créer l'invitation",
+    /*
+      La portée est dite sous le champ, pas après coup. Une invitation ouvre
+      TOUS les projets de l'organisation, présents et futurs : un libellé qui
+      laisserait croire à un accès par projet serait un défaut, pas une
+      approximation.
+    */
+    inviteScopeNote:
+      "Le membre aura accès à tous les projets de cette organisation, présents et futurs.",
+    inviteCreated: "Invitation créée. Transmettez le lien vous-même.",
+    /* Aucun envoi automatique avant le lot 5 : c'est dit à l'écran. */
+    inviteNoEmailNote:
+      "Aucun e-mail n'est envoyé. Copiez ce lien et transmettez-le par votre messagerie.",
+    inviteLinkLabel: "Lien d'invitation",
+
+    inviteErrors: {
+      invalidEmail: "Cette adresse ne semble pas valide.",
+      alreadyMember: "Cette adresse est déjà membre de l'organisation.",
+      alreadyInvited: "Une invitation est déjà en attente pour cette adresse.",
+      self: "Vous êtes déjà propriétaire de cette organisation.",
+      notOwner: "Vous n'administrez pas cette organisation.",
+    },
+  },
+
+  invite: {
+    title: "Invitation",
+    /* Le nom de l'organisation est toujours en clair : c'est ce qu'on rejoint. */
+    lead: "Vous êtes invité à rejoindre une organisation sur Omnisc.",
+    organizationLabel: "Organisation",
+    emailLabel: "Adresse invitée",
+    scopeNote:
+      "Vous aurez accès à tous les projets de cette organisation, présents et futurs.",
+    signIn: "Se connecter pour accepter",
+    accept: "Rejoindre l'organisation",
+    accepted: "Invitation acceptée.",
+
+    states: {
+      expiree: "Cette invitation a expiré. Demandez-en une nouvelle à l'organisation.",
+      revoquee: "Cette invitation a été révoquée par l'organisation.",
+      dejaAcceptee: "Cette invitation a déjà été acceptée. Connectez-vous pour accéder aux projets.",
+      introuvable: "Ce lien d'invitation n'existe pas.",
+    },
+
+    /* Refus : forme d'un refus (encart --alert-soft borde --alert-line), jamais celle d'une réponse ordinaire. */
+    wrongAccountTitle: "Ce lien ne correspond pas à votre compte",
+    wrongAccountBody:
+      "Cette invitation a été émise pour une autre adresse. Déconnectez-vous, puis rouvrez ce lien avec l'adresse attendue.",
+    wrongAccountExpected: "Adresse attendue",
+    wrongAccountCurrent: "Adresse connectée",
   },
 
   auth: {
@@ -188,6 +268,17 @@ export const fr = {
     addressColumn: "Adresse du projet",
     nameColumn: "Projet",
     statusColumn: "Statut",
+
+    /*
+      Deux natures, parce que les actions diffèrent — pas seulement l'étiquette.
+      « Mes projets » porte le quota, la création, le renommage et l'archivage.
+      « Projets partagés » est en lecture seule, un bloc par organisation.
+    */
+    mineTitle: "Mes projets",
+    sharedTitle: "Projets partagés",
+    sharedNote: "Vous avez été invité dans cette organisation. Ces projets sont en lecture seule.",
+    noOrganizationError:
+      "Votre organisation n'a pas pu être retrouvée. Reconnectez-vous.",
 
     new: {
       title: "Nouveau projet",

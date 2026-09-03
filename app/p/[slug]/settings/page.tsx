@@ -30,6 +30,14 @@ export default async function ProjectSettingsPage({
   // 404 et jamais 403 — voir la page projet.
   if (!project) notFound();
 
+  /*
+    L'écran de réglages n'existe QUE pour le propriétaire : il ne contient que
+    des actions qu'un invité n'a pas. Un 404 plutôt qu'un écran désactivé, par
+    cohérence avec la règle « inaccessible = introuvable » — et parce qu'un
+    écran vide de toute action n'apprendrait rien à personne.
+  */
+  if (project.role !== 'owner') notFound();
+
   const t = getDictionary();
   const address = formatInboundAddress(project.inboundLocalPart, env.INBOUND_DOMAIN);
   const archived = project.status === 'archived';

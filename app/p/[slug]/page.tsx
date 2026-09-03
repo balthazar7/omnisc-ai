@@ -58,9 +58,19 @@ export default async function ProjectPage({
           </div>
         </div>
 
-        <Button asChild variant="tertiary" size="sm">
-          <Link href={`/p/${project.inboundLocalPart}/settings`}>{t.projects.detail.settings}</Link>
-        </Button>
+        {/*
+          Réglages réservés au propriétaire. Un invité lit le projet, il ne le
+          renomme pas et ne l'archive pas. Masquer le bouton ne protège rien —
+          la page et les actions revérifient — mais proposer une porte fermée
+          serait pire que ne pas la montrer.
+        */}
+        {project.role === 'owner' && (
+          <Button asChild variant="tertiary" size="sm">
+            <Link href={`/p/${project.inboundLocalPart}/settings`}>
+              {t.projects.detail.settings}
+            </Link>
+          </Button>
+        )}
       </header>
 
       <Card size="hero" tone="accent">

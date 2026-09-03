@@ -84,8 +84,33 @@ export function createLogger(requestId: string, base: LogFields = {}): Logger {
  * renvoyé dans la réponse via `x-request-id` pour permettre le rapprochement.
  */
 export function loggerForRequest(request: Request, base: LogFields = {}): Logger {
-  const requestId =
-    request.headers.get('x-request-id') ?? request.headers.get('x-vercel-id') ?? randomUUID();
+  return createLogger(requestIdFromHeaders(request.headers), base);
+}
 
-  return createLogger(requestId, base);
+/** Le porteur minimal d'en-têtes dont ce module a besoin. */
+type HeaderReader = { get(name: string): string | null };
+
+/**
+ * `request_id` d'une requête, lu dans ses en-têtes.
+ *
+ * Extrait de `loggerForRequest` pour servir aussi aux composants serveur et aux
+ * server actions, qui n'ont pas d'objet `Request` mais ont `headers()`. Sans
+ * cela, chacun fabriquait son propre UUID et ses lignes ne se rapprochaient de
+ * rien — c'est exactement le défaut relevé en production sur `lib/orgs.ts`.
+ */
+export function requestIdFromHeaders(headerList: HeaderReader): string {
+  return headerList.get('x-request-id') ?? headerList.get('x-vercel-id') ?? randomUUID();
+}
+
+/**
+ * Logger d'un composant serveur ou d'une server action.
+ *
+ * `loggerForHeaders(await headers(), …)` est la seule façon correcte d'obtenir
+ * un logger hors d'un handler de route. **Ne jamais écrire
+ * `createLogger(crypto.randomUUID())` dans du code de requête** : la ligne
+ * produite est alors incorrélable, et la journalisation structurée n'existe que
+ * pour ce rapprochement.
+ */
+export function loggerForHeaders(headerList: HeaderReader, base: LogFields = {}): Logger {
+  return createLogger(requestIdFromHeaders(headerList), base);
 }

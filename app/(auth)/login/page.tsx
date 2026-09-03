@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Field, Input, InputHint } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { getUser } from '@/lib/auth/session';
+import { safeInternalPath } from '@/lib/http/origin';
 import { getDictionary } from '@/lib/i18n';
 
 import { requestMagicLink } from './actions';
@@ -24,13 +25,19 @@ export const dynamic = 'force-dynamic';
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ sent?: string; error?: string }>;
+  searchParams: Promise<{ sent?: string; error?: string; email?: string; next?: string }>;
 }) {
-  const user = await getUser();
-  if (user) redirect('/projects');
-
   const t = getDictionary();
-  const { sent, error } = await searchParams;
+  const { sent, error, email, next } = await searchParams;
+
+  /*
+    `next` porte le retour vers une page d'invitation. Il est assaini ici ET à
+    l'usage : cette page le rend dans un champ caché, donc il ressort tel quel.
+  */
+  const returnTo = safeInternalPath(next, '/projects');
+
+  const user = await getUser();
+  if (user) redirect(returnTo);
 
   const message =
     error === 'expired'
@@ -57,6 +64,7 @@ export default async function LoginPage({
             </p>
           ) : (
             <form action={requestMagicLink} className="flex flex-col gap-18">
+              <input type="hidden" name="next" value={returnTo} />
               <Field>
                 <Label htmlFor="email">{t.auth.emailLabel}</Label>
                 <Input
@@ -65,6 +73,7 @@ export default async function LoginPage({
                   type="email"
                   autoComplete="email"
                   required
+                  defaultValue={email ?? undefined}
                   placeholder={t.auth.emailPlaceholder}
                   aria-invalid={message ? true : undefined}
                 />

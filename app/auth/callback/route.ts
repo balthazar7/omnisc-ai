@@ -2,6 +2,7 @@ import { cookies } from 'next/headers';
 import { NextResponse, type NextRequest } from 'next/server';
 
 import { createAuthClient } from '@/lib/supabase/auth';
+import { safeInternalPath } from '@/lib/http/origin';
 import { loggerForRequest } from '@/lib/logger';
 
 /**
@@ -16,6 +17,11 @@ export async function GET(request: NextRequest) {
   const log = loggerForRequest(request);
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get('code');
+  /*
+    Retour demandé par l'écran de connexion. Assaini : ce paramètre a fait
+    l'aller-retour par un e-mail, donc il est modifiable par qui reçoit le lien.
+  */
+  const next = safeInternalPath(searchParams.get('next'), '/projects');
 
   if (!code) {
     log.warn('auth.callback.missing_code');
@@ -51,5 +57,5 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(`${origin}/login?error=expired`);
   }
 
-  return NextResponse.redirect(`${origin}/projects`);
+  return NextResponse.redirect(`${origin}${next}`);
 }

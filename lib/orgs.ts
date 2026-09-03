@@ -1,7 +1,7 @@
 import { getSql } from '@/lib/supabase/server';
 import { planLimits } from '@/lib/entitlements';
 import { getDictionary } from '@/lib/i18n';
-import { createLogger } from '@/lib/logger';
+import type { Logger } from '@/lib/logger';
 
 /** L'organisation d'un utilisateur, réduite à ce que les écrans affichent. */
 export type Organization = {
@@ -19,15 +19,26 @@ export type Organization = {
  * premier contact. L'organisation est créée à la première connexion, nommée
  * par défaut, et renommable ensuite.
  *
- * Le lot 1a ne crée que des `owner` ; le lot 1b s'occupe des invitations et du
- * second rôle.
+ * LA RECHERCHE PORTE SUR `role = 'owner'`, ET SUR RIEN D'AUTRE. C'est le point
+ * où le lot 1b casserait le lot 1a si l'on n'y prenait pas garde : depuis les
+ * invitations, un utilisateur peut appartenir à une organisation sans en être
+ * propriétaire. Une recherche sur « une appartenance quelconque » ferait passer
+ * un invité pour déjà pourvu, il n'obtiendrait jamais son organisation à lui, et
+ * ne pourrait donc jamais créer de projet.
+ *
+ * Tout utilisateur possède toujours sa propre organisation, y compris s'il
+ * arrive par une invitation : accepter une invitation AJOUTE une appartenance,
+ * cela ne remplace jamais l'organisation personnelle.
  *
  * `max_active_projects` est SEMÉE ICI depuis la table des limites de
  * `lib/entitlements.ts`, puis c'est la colonne qui fait foi. Une remise
  * commerciale sur un compte se règle alors en base, sans déploiement, et la
  * colonne n'est jamais une valeur morte que personne ne relit.
  */
-export async function ensureOrganizationForUser(userId: string): Promise<Organization> {
+export async function ensureOrganizationForUser(
+  userId: string,
+  log: Logger,
+): Promise<Organization> {
   const sql = getSql();
 
   const existing = await sql<
@@ -37,6 +48,7 @@ export async function ensureOrganizationForUser(userId: string): Promise<Organiz
       from public.organizations o
       join public.organization_members m on m.org_id = o.id
      where m.user_id = ${userId}
+       and m.role = 'owner'
      order by o.created_at asc
      limit 1
   `;
@@ -54,8 +66,6 @@ export async function ensureOrganizationForUser(userId: string): Promise<Organiz
   const t = getDictionary();
   const plan = 'trial';
   const limit = planLimits(plan).maxActiveProjects;
-
-  const log = createLogger(crypto.randomUUID(), { event_source: 'orgs.ensure' });
 
   /*
     Les deux insertions sont dans UNE SEULE transaction : une organisation sans
